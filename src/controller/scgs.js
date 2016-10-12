@@ -99,7 +99,15 @@ export default class extends Base {
       if(!_.size(list[0])) break;
       dataList.push(...list);
     }
-    this.assign({dataList});
+    let result = await new Promise((resolve, reject)=>{
+      httpClient.get('http://wsbs.sc-n-tax.gov.cn/inc/intoWssb.htm', (error, response, body)=>{
+        if(error)reject(error);
+        else{
+          resolve(body);
+        }
+      });
+    });
+    this.assign({dataList, result});
     return this.display();
   }
 }
