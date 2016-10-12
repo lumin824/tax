@@ -99,17 +99,16 @@ export default class extends Base {
       if(!_.size(list[0])) break;
       dataList.push(...list);
     }
-    let result = await new Promise((resolve, reject)=>{
+    let qyjbxx = await new Promise((resolve, reject)=>{
       httpClient.get('http://wsbs.sc-n-tax.gov.cn/inc/intoWssb.htm', (error, response, body)=>{
         if(error)reject(error);
         else{
           let $ = cheerio.load(body);
-          let qyjbxx = $('#qyjbxxDiv').text();
-          resolve(qyjbxx);
+          resolve(JSON.parse($('#qyjbxxDiv').text()));
         }
       });
     });
-    this.assign({dataList, result});
+    this.assign({dataList, qyjbxx});
     return this.display();
   }
 }

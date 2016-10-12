@@ -13,7 +13,70 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          {{result}}
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <td>企业名称</td>
+                <td>{{qyjbxx.nsrmc}}</td>
+              </tr>
+              <tr>
+                <td>税务机关</td>
+                <td>{{qyjbxx.zgswjgmc}}</td>
+              </tr>
+              <tr>
+                <td>联系电话</td>
+                <td>{{qyjbxx.fddbryddh}}</td>
+              </tr>
+              <tr>
+                <td>法人代表</td>
+                <td>{{qyjbxx.fddbrxm}}</td>
+              </tr>
+              <tr>
+                <td>注册地址</td>
+                <td>{{qyjbxx.zcdz}}</td>
+              </tr>
+              <tr>
+                <td>经营地址</td>
+                <td>{{qyjbxx.scjydz}}</td>
+              </tr>
+              <tr>
+                <td>行业类型代码</td>
+                <td>{{qyjbxx.djzclx_dm}}</td>
+              </tr>
+              <tr>
+                <td>行业类型名称</td>
+                <td>{{qyjbxx.djzclxmc}}</td>
+              </tr>
+              <tr>
+                <td>登记类型编码</td>
+                <td>{{qyjbxx.hy_dm}}</td>
+              </tr>
+              <tr>
+                <td>登记类型名称</td>
+                <td>{{qyjbxx.hymc}}</td>
+              </tr>
+              <tr>
+                <td>会计制度代码</td>
+                <td>{{qyjbxx.kjzdzz_dm}}</td>
+              </tr>
+              <tr>
+                <td>会计制度名称</td>
+                <td>{{qyjbxx.kjzdzzmc}}</td>
+              </tr>
+              <tr>
+                <td>是否防伪税控</td>
+                <td>{{'是' if qyjbxx.isfwskqy == 'Y' else '否'}}</td>
+              </tr>
+              <tr>
+                <td>是否百旺金赋</td>
+                <td>{{'是' if qyjbxx.isbwjfkk == 'Y' else '否'}}</td>
+              </tr>
+              <tr>
+                <td>是否居民企业</td>
+                <td>{{'否' if qyjbxx.fjmqybz == 'Y' else '是'}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
       <div class="row">
