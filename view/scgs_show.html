@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>四川国税</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>凭证号码</th>
+                <th>税（费）种</th>
+                <th>税（费）目</th>
+                <th>征收率</th>
+                <th>所属时期</th>
+                <th>实缴金额</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in dataList %}
+              <tr>
+                <td>{{o.pzhm}}</td>
+                <td>{{o.sz}}</td>
+                <td>{{o.sm}}</td>
+                <td>{{o.zsl}}</td>
+                <td>{{o.sssq}}</td>
+                <td>{{o.sjje}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script>
+      $(function(){
+
+      });
+    </script>
+  </body>
+</html>
