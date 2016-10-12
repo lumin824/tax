@@ -103,7 +103,9 @@ export default class extends Base {
       httpClient.get('http://wsbs.sc-n-tax.gov.cn/inc/intoWssb.htm', (error, response, body)=>{
         if(error)reject(error);
         else{
-          resolve(body);
+          let $ = cheerio.load(body);
+          let qyjbxx = $('#qyjbxxDiv').text();
+          resolve(qyjbxx);
         }
       });
     });
