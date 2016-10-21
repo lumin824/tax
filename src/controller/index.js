@@ -6,4 +6,9 @@ export default class extends Base {
   indexAction(){
     return this.display();
   }
+
+  uploadAction(){
+
+    return this.success('aaa');
+  }
 }
