@@ -8,7 +8,8 @@ export default class extends Base {
   }
 
   async uploadAction(){
-    let { html:content, url:from } = this.param();
+    let body = await this.http.getPayload();
+    let { html:content, url:from } = JSON.parse(body);
     await this.model('raw_data').add({
       content, from
     })
