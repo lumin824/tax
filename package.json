@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "babel-runtime": "6.x.x",
-    "cheerio": "^0.22.0",
-    "lodash": "^4.16.4",
-    "node-uuid": "^1.4.7",
-    "nunjucks": "^2.2.0",
-    "request": "^2.75.0",
+    "cheerio": "0.22.0",
+    "lodash": "4.16.4",
+    "moment": "2.15.1",
+    "node-uuid": "1.4.7",
+    "nunjucks": "2.2.0",
+    "request": "2.75.0",
     "source-map-support": "0.4.0",
     "thinkjs": "2.2.x",
     "tough-cookie-filestore": "0.0.1"

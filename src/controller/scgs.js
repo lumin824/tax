@@ -1,22 +1,9 @@
 'use strict';
 
-import Base from './base.js';
+import Base from './sysbase.js';
 
-import request from 'request';
-import fs from 'fs';
-import FileCookieStore from 'tough-cookie-filestore';
 import cheerio from 'cheerio';
 import _ from 'lodash';
-import uuid from 'node-uuid';
-
-let getOrCreateHttpClient = (token) => {
-  let cookiePath = think.RUNTIME_PATH + `/scgs_cookie_${token}.json`;
-  if(!fs.existsSync(cookiePath)){
-    fs.writeFileSync(cookiePath, '');
-  }
-  let jar = request.jar(new FileCookieStore(cookiePath));
-  return request.defaults({jar});
-};
 
 let getJKPZ = (httpClient, p) => new Promise((resolve, reject)=>{
   httpClient.get('http://wsbs.sc-n-tax.gov.cn/invoice/jkpz.htm', {qs:{p}}, (error, response, body)=>{
@@ -40,12 +27,7 @@ let getJKPZ = (httpClient, p) => new Promise((resolve, reject)=>{
 export default class extends Base {
 
   async indexAction(){
-    let token = await this.session('token');
-    if(!token){
-      token = uuid.v4();
-      this.session('token', token);
-    }
-    let httpClient = getOrCreateHttpClient(token);
+    let httpClient = await this.getOrCreateHttpClient();
     if(this.isAjax()){
       let { username:userName, password, captcha:vcode } = this.param();
       let form = {userName, password, vcode, dlfs:1 };
@@ -77,22 +59,12 @@ export default class extends Base {
   }
 
   async captchaAction(){
-    let token = await this.session('token');
-    if(!token){
-      token = uuid.v4();
-      this.session('token', token);
-    }
-    let httpClient = getOrCreateHttpClient(token);
+    let httpClient = await this.getOrCreateHttpClient();
     httpClient.get('http://wsbs.sc-n-tax.gov.cn/vcode').pipe(this.http.res);
   }
 
   async showAction(){
-    let token = await this.session('token');
-    if(!token){
-      token = uuid.v4();
-      this.session('token', token);
-    }
-    let httpClient = getOrCreateHttpClient(token);
+    let httpClient = await this.getOrCreateHttpClient();
     let dataList = [];
     for(let i = 1; i <= 100; i++){
       let list = await getJKPZ(httpClient, i);
