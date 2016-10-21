@@ -8,7 +8,7 @@ export default class extends Base {
   }
 
   uploadAction(){
-
+    console.log(this.param());
     return this.success('aaa');
   }
 }
