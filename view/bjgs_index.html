@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>北京国税</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <dl>
+            <dt>1.安装资信上报IE插件</dt>
+            <dd>下载<a href="http://share.weiyun.com/d68cfc4f61b60ca14e77f7a41ccc703b" target="_blank">资信上报IE插件</a>,按照安装说明进行安装。</dd>
+            <dt>2.登录北京国税系统</dt>
+            <dd>打开<a href="http://www.bjsat.gov.cn/WSBST/bsdt/login/login.jsp" target="_blank">北京国税</a>，按照提示登录系统。</dd>
+            <dt>3.上传数据页面</dt>
+            <dd>打开以下页面:</dd>
+            <dd>
+              <ol>
+                <li>页面1</li>
+                <li>页面2</li>
+                <li>页面3</li>
+                <li>页面4</li>
+              </ol>
+            </dd>
+            <dd>右键页面，点击"资信上报"。</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery-validate/1.13.0/jquery.validate.min.js"></script>
+    <script src="//cdn.bootcss.com/lodash.js/4.16.4/lodash.min.js"></script>
+    <script>
+      $(function(){
+        $('form').validate({
+          submitHandler:function(form){
+            var $form = $(form);
+            var data = _.reduce($form.serializeArray(), function(result, o){
+              result[o.name] = o.value;
+              return result;
+            }, {});
+
+            var url = $form.attr('action');
+            var type = $form.attr('method');
+            $.ajax({
+              url: url,
+              type: type,
+              data: data,
+              success: function(resp){
+                if(resp.errno == 0){
+                  if(resp.data.redirect) window.location.href = resp.data.redirect;
+                }else{
+                  alert(resp.errmsg);
+                }
+              }
+            });
+          }
+        })
+      });
+    </script>
+  </body>
+</html>
