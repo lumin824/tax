@@ -1,6 +1,7 @@
 'use strict';
 
 import Base from './base.js';
+import moment from 'moment';
 
 export default class extends Base {
   indexAction(){
