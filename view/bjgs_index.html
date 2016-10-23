@@ -12,24 +12,29 @@
   <body>
     <div class="container">
       <div class="row">
-        <div class="col-sm-12">
-          <dl>
-            <dt>1.安装资信上报IE插件</dt>
-            <dd>下载<a href="http://share.weiyun.com/d68cfc4f61b60ca14e77f7a41ccc703b" target="_blank">资信上报IE插件</a>,按照安装说明进行安装。</dd>
-            <dt>2.登录北京国税系统</dt>
-            <dd>打开<a href="http://www.bjsat.gov.cn/WSBST/bsdt/login/login.jsp" target="_blank">北京国税</a>，按照提示登录系统。</dd>
-            <dt>3.上传数据页面</dt>
-            <dd>打开以下页面:</dd>
-            <dd>
-              <ol>
-                <li>页面1</li>
-                <li>页面2</li>
-                <li>页面3</li>
-                <li>页面4</li>
-              </ol>
-            </dd>
-            <dd>右键页面，点击"资信上报"。</dd>
-          </dl>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-default" id="btn-load">加载北京一证通</button>
+          <form name="LoginForm" class="form-horizontal" role="form" method="post" action="/bjgs">
+            <input type="hidden" name="Random" value="{{strRandom}}">
+            <div class="form-group">
+              <label for="UserList" class="col-sm-3 control-label">证书</label>
+              <div class="col-sm-9">
+                <select class="form-control" id="UserList" name="strCertID"></select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password" class="col-sm-3 control-label">密码</label>
+              <div class="col-sm-9">
+                <input class="form-control" id="password" name="password" type="password" value="65410758" placeholder="密码">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">执行</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -38,8 +43,19 @@
     <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="//cdn.bootcss.com/jquery-validate/1.13.0/jquery.validate.min.js"></script>
     <script src="//cdn.bootcss.com/lodash.js/4.16.4/lodash.min.js"></script>
+
+    <script type="text/javascript" src="http://www.bjsat.gov.cn/WSBST/bsdt/login/js/XTXSuite_login.js"></script>
+    <script type="text/javascript" src="http://www.bjsat.gov.cn/WSBST/bsdt/login/js/date.js"></script>
     <script>
+      var strServerSignedData = "{{strServerSignedData}}";
+      var strServerRan = "{{strServerRan}}";
+      var strServerCert = "{{strServerCert}}";
       $(function(){
+        $('#btn-load').click(function(){
+          $LoadBJCACOM();
+          SetUserCertList("LoginForm.UserList");
+          $FillCertList();
+        });
         $('form').validate({
           submitHandler:function(form){
             var $form = $(form);
@@ -47,6 +63,15 @@
               result[o.name] = o.value;
               return result;
             }, {});
+
+            var ret = Login("LoginForm", data.strCertID, data.password);
+            if(ret){
+              data = _.reduce($form.serializeArray(), function(result, o){
+                result[o.name] = o.value;
+                return result;
+              }, {});
+              console.log(data);
+            }
 
             var url = $form.attr('action');
             var type = $form.attr('method');

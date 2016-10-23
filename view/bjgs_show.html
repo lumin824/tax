@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>北京国税</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <td width="150px">纳税人名称</td>
+                <td>{{info.nsrmc}}</td>
+              </tr>
+              <tr>
+                <td>纳税人识别号</td>
+                <td>{{info.nsrsbh}}</td>
+              </tr>
+              <tr>
+                <td>社会信用代码</td>
+                <td>{{info.shxydm}}</td>
+              </tr>
+              <tr>
+                <td>登记日期</td>
+                <td>{{info.djrq}}</td>
+              </tr>
+              <tr>
+                <td>登记注册类型</td>
+                <td>{{info.djzclxmc}}</td>
+              </tr>
+              <tr>
+                <td>组织机构代码</td>
+                <td>{{info.zzjg_dm}}</td>
+              </tr>
+              <tr>
+                <td>行业大类</td>
+                <td>{{info.hydl}}</td>
+              </tr>
+              <tr>
+                <td>行业小类</td>
+                <td>{{info.hyxl}}</td>
+              </tr>
+              <tr>
+                <td>注册地址</td>
+                <td>{{info.zcdz}}</td>
+              </tr>
+              <tr>
+                <td>注册地址联系电话</td>
+                <td>{{info.zcdlxdh}}</td>
+              </tr>
+              <tr>
+                <td>注册地址邮政编码</td>
+                <td>{{info.zcdyzbm}}</td>
+              </tr>
+              <tr>
+                <td>生产经营地址</td>
+                <td>{{info.scjydz}}</td>
+              </tr>
+              <tr>
+                <td>生产经营地址联系电话</td>
+                <td>{{info.scjydlxdh}}</td>
+              </tr>
+              <tr>
+                <td>生产经营地址邮政编码</td>
+                <td>{{info.scjydyzbm}}</td>
+              </tr>
+              <tr>
+                <td>核算方式</td>
+                <td>{{info.hsfsmc}}</td>
+              </tr>
+              <tr>
+                <td>从业人数</td>
+                <td>{{info.cyrs}}</td>
+              </tr>
+              <tr>
+                <td>外籍从业人数</td>
+                <td>{{info.wjcyrs}}</td>
+              </tr>
+              <tr>
+                <td>合伙人数</td>
+                <td>{{info.hhrs}}</td>
+              </tr>
+              <tr>
+                <td>雇工人数</td>
+                <td>{{info.ggrs}}</td>
+              </tr>
+              <tr>
+                <td>固定工人数</td>
+                <td>{{info.gdgrs}}</td>
+              </tr>
+              <tr>
+                <td>经营范围</td>
+                <td>{{info.jyfw}}</td>
+              </tr>
+              <tr>
+                <td>法定代表人姓名</td>
+                <td>{{info.fddbrxm}}</td>
+              </tr>
+              <tr>
+                <td>证件种类</td>
+                <td>{{info.fddbrsfzjlx_dm}}</td>
+              </tr>
+              <tr>
+                <td>证件号码</td>
+                <td>{{info.fddbrsfzjhm}}</td>
+              </tr>
+              <tr>
+                <td>固定电话</td>
+                <td>{{info.fddbrgddh}}</td>
+              </tr>
+              <tr>
+                <td>移动电话</td>
+                <td>{{info.fddbryddh}}</td>
+              </tr>
+              <tr>
+                <td>电子邮箱</td>
+                <td>{{info.fddbrdzxx}}</td>
+              </tr>
+              <tr>
+                <td>财务负责人姓名</td>
+                <td>{{info.cwfzrxm}}</td>
+              </tr>
+              <tr>
+                <td>证件种类</td>
+                <td>{{info.cwfzrsfzjzl_dm}}</td>
+              </tr>
+              <tr>
+                <td>证件号码</td>
+                <td>{{info.cwfzrsfzjhm}}</td>
+              </tr>
+              <tr>
+                <td>固定电话</td>
+                <td>{{info.cwfzrgddh}}</td>
+              </tr>
+              <tr>
+                <td>移动电话</td>
+                <td>{{info.cwfzryddh}}</td>
+              </tr>
+              <tr>
+                <td>电子邮箱</td>
+                <td>{{info.cwfzrdzxx}}</td>
+              </tr>
+              <tr>
+                <td>办税人员姓名</td>
+                <td>{{info.bsrxm}}</td>
+              </tr>
+              <tr>
+                <td>证件种类</td>
+                <td>{{info.bsrsfzjzl_dm}}</td>
+              </tr>
+              <tr>
+                <td>证件号码</td>
+                <td>{{info.bsrsfzjhm}}</td>
+              </tr>
+              <tr>
+                <td>固定电话</td>
+                <td>{{info.bsrgddh}}</td>
+              </tr>
+              <tr>
+                <td>移动电话</td>
+                <td>{{info.bsryddh}}</td>
+              </tr>
+              <tr>
+                <td>电子邮箱</td>
+                <td>{{info.bsrdzxx}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script>
+      $(function(){
+
+      });
+    </script>
+  </body>
+</html>
