@@ -35,12 +35,16 @@ export default class extends Base {
         httpClient.post('http://wsbs.sc-n-tax.gov.cn/op_login.htm', {form}, (error, response, body)=>{
           if(error)reject(error);
           else{
-            resolve(body);
+            resolve(JSON.parse(body));
           }
 
         });
       });
-      this.success({redirect:'/scgs/show'});
+      if(result.code){
+        this.fail(result.code, result.mesg);
+      }else{
+        this.success({redirect1:'/scgs/show'});
+      }
     }
     else{
       let result = await new Promise((resolve, reject)=>{
@@ -76,6 +80,8 @@ export default class extends Base {
         if(error)reject(error);
         else{
           let $ = cheerio.load(body);
+          console.log(body);
+          console.log($('#qyjbxxDiv').text());
           resolve(JSON.parse($('#qyjbxxDiv').text()));
         }
       });

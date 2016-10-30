@@ -19,6 +19,7 @@
     "request": "2.75.0",
     "source-map-support": "0.4.0",
     "thinkjs": "2.2.x",
+    "tough-cookie": "^2.3.2",
     "tough-cookie-filestore": "0.0.1"
   },
   "devDependencies": {
