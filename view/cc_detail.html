@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>信用中国 - 税务资信</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            基础信息
+            <a href="/" class="btn btn-success" style="margin-left:10px;">国赋资信</a>
+            <a href="javascript:;" data-toggle="collapse" data-target="#sx" aria-expanded="true" aria-controls="sx" class="btn btn-default" style="margin-left:10px;background:#fff;">失信等级 T {{hmddj}} *</a>
+          </div>
+          <div class="panel-body">
+            {% for o in result.infos[0][0] %}
+            {{o}}<br>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div id="sx" class="collapse">
+        <div class="row">
+          <div class="panel panel-default" >
+            <div class="panel-body">
+              <div >
+                涉案金额总计：{{hmdje}}元<br><br>
+                {% for o in schmd %}
+                {{o.ah}}<br>
+                {{o.frxm}}<br>
+                {{o.qdyw}}<br>
+                涉案金额：{{o.je}}元<br>
+                <br>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">优良记录</div>
+          <div class="panel-body collapse">
+            {% for o in result.infos[1] %}
+            {% for p in o %}
+            {{p}}<br>
+            {% endfor %}
+            <hr>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">负面记录</div>
+          <div class="panel-body collapse">
+            {% for o in result.infos[2] %}
+            {% for p in o %}
+            {{p}}<br>
+            {% endfor %}
+            <hr>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading"><a href="javascript:;" data-toggle="collapse" data-target="#schmd" aria-expanded="true" aria-controls="schmd">受惩黑名单</a></div>
+          <div id="schmd" class="panel-body collapse">
+            {% for o in result.infos[3] %}
+            {% for p in o %}
+            {{p}}<br>
+            {% endfor %}
+            <hr>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery-validate/1.13.0/jquery.validate.min.js"></script>
+    <script src="//cdn.bootcss.com/lodash.js/4.16.4/lodash.min.js"></script>
+    <script>
+      $(function(){
+      });
+    </script>
+  </body>
+</html>

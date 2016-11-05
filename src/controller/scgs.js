@@ -40,10 +40,10 @@ export default class extends Base {
 
         });
       });
-      if(result.code){
-        this.fail(result.code, result.mesg);
+      if(result.code == 100){
+        this.success({redirect:'/scgs/show'});
       }else{
-        this.success({redirect1:'/scgs/show'});
+        this.fail(result.code, result.mesg);
       }
     }
     else{
@@ -80,8 +80,6 @@ export default class extends Base {
         if(error)reject(error);
         else{
           let $ = cheerio.load(body);
-          console.log(body);
-          console.log($('#qyjbxxDiv').text());
           resolve(JSON.parse($('#qyjbxxDiv').text()));
         }
       });

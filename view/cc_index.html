@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>信用中国 - 税务资信</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <form role="form" class="form-inline" action="/cc" method="get">
+          <div class="form-group">
+            <input type="text" name="keyword" class="form-control" value="{{http.query.keyword}}" placeholder="请输入企业或个人信息">
+          </div>
+          <button type="submit" class="btn btn-default">搜索</button>
+        </form>
+      </div>
+
+      {% if result.length %}
+      <div class="row">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>主体类型</th>
+              <th>组织机构/身份证号</th>
+              <th>纪录类型</th>
+              <th>归属地址</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for o in result %}
+            <tr>
+              <td>
+                <a href="/cc/detail?objectType={{o.objectType}}&encryStr={{o.encryStr}}" target="_blank">{{o.name}}</a>
+                <a href="http://www.creditchina.gov.cn/credit_info_detail?objectType={{o.objectType}}&encryStr={{o.encryStr}}" target="_blank">信用中国</a>
+              </td>
+              <td>{{o.idCardOrOrgCode}}</td>
+              <td>{{o.goodCount}}|{{o.badCount}}|{{o.dishonestyCount}}</td>
+              <td>{{o.area}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+
+
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery-validate/1.13.0/jquery.validate.min.js"></script>
+    <script src="//cdn.bootcss.com/lodash.js/4.16.4/lodash.min.js"></script>
+    <script>
+      $(function(){
+      });
+    </script>
+  </body>
+</html>

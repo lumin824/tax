@@ -22,9 +22,9 @@ export default class extends think.controller.base {
     if(!fs.existsSync(cookiePath)){
       fs.writeFileSync(cookiePath, '');
     }
-    //let jar = request.jar(new FileCookieStore(cookiePath));
-    let store = new DbCookieStore(this);
-    let jar = request.jar(store);
+    let jar = request.jar(new FileCookieStore(cookiePath));
+    // let store = new DbCookieStore(this);
+    // let jar = request.jar(store);
     return request.defaults({jar});
   }
 }
