@@ -36,10 +36,14 @@
             <tr>
               <td>
                 <a href="/cc/detail?objectType={{o.objectType}}&encryStr={{o.encryStr}}" target="_blank">{{o.name}}</a>
-                <a href="http://www.creditchina.gov.cn/credit_info_detail?objectType={{o.objectType}}&encryStr={{o.encryStr}}" target="_blank">信用中国</a>
+                <a href="http://www.creditchina.gov.cn/credit_info_detail?objectType={{o.objectType}}&encryStr={{o.encryStr}}" target="_blank"><span class="glyphicon glyphicon-link"></span>信用中国</a>
               </td>
               <td>{{o.idCardOrOrgCode}}</td>
-              <td>{{o.goodCount}}|{{o.badCount}}|{{o.dishonestyCount}}</td>
+              <td>
+                <span class="label label-info">{{o.goodCount}}</span>
+                <span class="label label-warning">{{o.badCount}}</span>
+                <span class="label label-danger">{{o.dishonestyCount}}</span>
+              </td>
               <td>{{o.area}}</td>
             </tr>
             {% endfor %}
