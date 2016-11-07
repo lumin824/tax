@@ -7,18 +7,22 @@ import cheerio from 'cheerio';
 
 export default class extends Base {
   async indexAction(){
-    let { keyword } = this.param();
-    if(keyword){
+    let { keyword='',templateId='' } = this.param();
+
+    let fetchTemplate = async (keyword, templateId)=>{
       let form = {
         keyword,searchtype:'0',objectType:'2',areas:'',creditType:'',
-        dataType:'1',areaCode:'',templateId:'',exact:'0',page:'1'
+        dataType:'1',areaCode:'',templateId,exact:'0',page:'1'
       };
       let headers = { 'User-Agent':'request', 'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8' };
 
       let fetchFunc = (page)=> new Promise((resolve, reject)=>{
+        console.log(form);
+        console.log(page);
         request.post('http://www.creditchina.gov.cn/credit_info_search',{
           form:{...form, page},headers
         },(error, response, body)=>{
+          console.log(body);
           if(error) reject(error);
           else resolve(JSON.parse(body));
         });
@@ -26,7 +30,7 @@ export default class extends Base {
 
       let result = await fetchFunc('1');
 
-      if(result.result.totalPageCount > 1){
+      if(result.result.totalPageCount > 1 && !templateId){
         let pageNumList = [];
         for(let i = 2; i <= result.result.totalPageCount && i<=5;i++){
           pageNumList.push(i);
@@ -38,9 +42,20 @@ export default class extends Base {
       }
 
       result = _.flatten(_.map(result, 'result.results'));
-      this.assign('result', result);
+      return result;
+    };
 
+    let resultList = [];
+    if(templateId){
+      resultList = await Promise.all(_.map(templateId.split(','), async o=>fetchTemplate(keyword, o)));
+    }else{
+      let result = await fetchTemplate(keyword,'');
+      resultList = [result];
     }
+
+
+    this.assign('result', _.flatten(resultList));
+
     return this.display();
   }
 
