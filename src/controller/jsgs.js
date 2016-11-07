@@ -4,6 +4,7 @@ import Base from './sysbase.js';
 import crypto from 'crypto';
 import cheerio from 'cheerio';
 import _ from 'lodash';
+import url from 'url';
 
 export default class extends Base {
   async indexAction(){
@@ -77,21 +78,138 @@ export default class extends Base {
 
   async showAction(){
     let httpClient = await this.getOrCreateHttpClient();
-    let info = await new Promise((resolve, reject)=>{
-      httpClient.get('http://etax.jsgs.gov.cn/portal/index.do', (error, response, body)=>{
-        if(error) reject(error);
-        else{
-          let $ = cheerio.load(body);
-          let $info = $('#div_user_info div div div');
-          resolve({
-            nsrmc: $info.eq(0).text(),
-            nsrsbh: $info.eq(2).text()
-          })
-        }
-      });
+    let res;
+
+    let info;
+    res = await this.httpGet('http://etax.jsgs.gov.cn/portal/index.do');
+    if(res.body){
+      let $ = cheerio.load(res.body);
+      let $info = $('#div_user_info div div div');
+      info = {
+        nsrmc: $info.eq(0).text(),
+        nsrsbh: $info.eq(2).text()
+      };
+    }
+
+    let token = '';
+    res = await this.httpGet('http://etax.jsgs.gov.cn/portal//queryapi/private/commonPage.do', {
+      qs:{sign:'query_swdjxx'}
+    });
+    if(res.body){
+      let m = res.body.match(/token\s*:\s*"(\S+)"/);
+      if(m) token = m[1];
+    }
+
+    let swdjxx;
+    res = await this.httpPost('http://etax.jsgs.gov.cn/portal/queryapi/private/query.do', {
+      form:{request:JSON.stringify({action:'query_swdjxx_dwnsr',token,body:{sign:'query_swdjxx_dwnsr'}}) }
+    });
+    if(res.body){
+      swdjxx = JSON.parse(JSON.parse(res.body).DATA);
+    }
+
+    let tzfxx;
+    res = await this.httpPost('http://etax.jsgs.gov.cn/portal/queryapi/private/query.do', {
+      form:{request:JSON.stringify({action:'query_swdjxx_dwnsr_tzfxx',token,body:{sign:'query_swdjxx_dwnsr_tzfxx'}}) }
+    });
+    if(res.body){
+      tzfxx = JSON.parse(JSON.parse(res.body).DATA).rows;
+    }
+
+    let skjn;
+    res = await this.httpPost('http://etax.jsgs.gov.cn/portal/queryapi/private/query.do', {
+      form:{request:JSON.stringify({action:'query_skjncx',token,body:{sign:'query_skjncx',tj0:'2000-01-01',tj1:'3000-01-01'}}) }
+    });
+    if(res.body){
+      skjn = JSON.parse(JSON.parse(res.body).DATA).rows;
+    }
+
+    await this.httpPost('http://etax.jsgs.gov.cn/portal//user/my_app/forbiddenApp.do');
+    await this.httpPost('http://etax.jsgs.gov.cn/portal/home/index/shortcut_appmanage.do', {
+      qs: {sign:'query', type:'all'}
     });
 
-    this.assign({info});
+    // 应用列表
+    let appList;
+    res = await this.httpPost('http://etax.jsgs.gov.cn/portal/user/my_app/app_manage.do', {
+      qs: {sign:'query', type:'all'}
+    });
+    if(res.body){
+      appList = JSON.parse(res.body).DATA;
+    }
+
+    appList = _.map(appList, o=>({
+      app_dm:o.app_dm,
+      app_bbh:o.bbh,
+      appNo:o.appNo,
+      sf_mk:o.sf_mk,
+      app_url:o.app_url,
+      appb_jxlx:o.appb_jxlx,
+      app_mc:o.app_mc
+    }));
+
+    // 财务报表
+    let { app_mc, ...form } = _.find(appList, {app_dm:'shenbao.yjd.cwbb'});
+    let cwbbapp;
+    res = await this.httpPost('http://etax.jsgs.gov.cn/portal/user/my_app/app_manage.do', {
+      qs: {sign:'to_app'}, form
+    });
+    if(res.body){
+      cwbbapp = JSON.parse(res.body).DATA;
+    }
+    console.log(cwbbapp.url)
+
+    let path;
+    let cwbbapp_home;
+    res = await this.httpGet(cwbbapp.url, {followRedirect:false});
+    path = res.response.headers['location'];
+    console.log(path);
+
+    res = await this.httpGet(path, {followRedirect:false});
+    path = res.response.headers['location'];
+    console.log(path);
+
+    res = await this.httpGet(path, {followRedirect:false});
+    path = res.response.headers['location'];
+    console.log(path);
+
+    console.log(res.body);
+    if(res.response){
+      // console.log(res.response.request.headers);
+      // console.log(res.response.headers);
+      //console.log(res.body)
+      //cwbbapp_home = res.response.headers['location'];
+    }
+    //console.log(res.body);
+
+
+      // let home = await new Promise((resolve, reject)=>{
+      //   httpClient.get(cwbbapp.url,(error, response, body)=>{
+      //     if(error) reject(error);
+      //     else resolve(body);
+      //   });
+      // });
+      //console.log(home);
+
+
+      // let sbcxUrl =  url.resolve(apphome, 'sbcxAction.action');
+      // console.log(sbcxUrl);
+
+
+
+      // let sbList = await new Promise((resolve, reject)=>{
+      //   httpClient.post(sbcxUrl, {
+      //     qs:{sign:'queryData',sb_type:'16'},
+      //     form: {begin_skssq:'',end_skssq:'',sbrq:'',zt:'1'}
+      //   }, (error,response, body)=>{
+      //     if(error) reject(error);
+      //     else resolve(body);
+      //   });
+      // });
+      //
+      // console.log(sbList);
+
+    this.assign({info,swdjxx,tzfxx,skjn});
 
     return this.display();
   }

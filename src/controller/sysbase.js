@@ -18,6 +18,8 @@ export default class extends think.controller.base {
       this.session('token', token);
     }
 
+    console.log(token);
+
     let cookiePath = think.RUNTIME_PATH + `/scgs_cookie_${token}.json`;
     if(!fs.existsSync(cookiePath)){
       fs.writeFileSync(cookiePath, '');
@@ -26,5 +28,25 @@ export default class extends think.controller.base {
     // let store = new DbCookieStore(this);
     // let jar = request.jar(store);
     return request.defaults({jar});
+  }
+
+  async httpPost(...args){
+    if(!this.httpClient) this.httpClient = this.getOrCreateHttpClient();
+    return new Promise((resolve, reject)=>{
+      this.httpClient.post(...args, (error, response, body)=>{
+        if(error) reject(error);
+        else resolve({response, body});
+      });
+    });
+  }
+
+  async httpGet(...args){
+    if(!this.httpClient) this.httpClient = await this.getOrCreateHttpClient();
+    return new Promise((resolve, reject)=>{
+      this.httpClient.get(...args, (error, response, body)=>{
+        if(error) reject(error);
+        else resolve({response, body});
+      });
+    });
   }
 }
