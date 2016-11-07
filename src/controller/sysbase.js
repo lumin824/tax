@@ -18,8 +18,6 @@ export default class extends think.controller.base {
       this.session('token', token);
     }
 
-    console.log(token);
-
     let cookiePath = think.RUNTIME_PATH + `/scgs_cookie_${token}.json`;
     if(!fs.existsSync(cookiePath)){
       fs.writeFileSync(cookiePath, '');
