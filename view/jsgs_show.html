@@ -31,6 +31,87 @@
 
       <div class="row">
         <div class="panel panel-default">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>T(x)*G(y)</th>
+                <th>2016.11</th>
+                <th>2015.12</th>
+                <th>2014.12</th>
+                <th>2013.12</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td title="=lg实缴税收(千元)">T¥*</td>
+                <td>{{grid.a[0]}}*</td>
+                <td>7.2* [20]</td>
+                <td>7.1* [25]</td>
+                <td>6.9* [29]</td>
+              </tr>
+              <tr>
+                <td title="=税收/总资产(assets)(%)">G(a)</td>
+                <td></td>
+                <td>0.6a [2916]</td>
+                <td>0.6a [7939]</td>
+                <td>0.5a [7853]</td>
+              </tr>
+              <tr>
+                <td title="=税收/总资本(capital)(%)">G(c)</td>
+                <td>{{grid.c[0]}}c</td>
+                <td>105.6c [137]</td>
+                <td>113.7c [123]</td>
+                <td>90.9c [206]</td>
+              </tr>
+              <tr>
+                <td title="=税收/总权益(equity)(%)">G(e)</td>
+                <td></td>
+                <td>9.4e [704]</td>
+                <td>9.9e [2875]</td>
+                <td>7.7e [3850]</td>
+              </tr>
+              <tr>
+                <td title="=税收/财务费用(interest)">G(i)</td>
+                <td></td>
+                <td>0.2i [2114]</td>
+                <td>0.2i [6261]</td>
+                <td>0.2i [6060]</td>
+              </tr>
+              <tr>
+                <td title="=税收/总负债(liability)(%)">G(L)</td>
+                <td></td>
+                <td>0.6L [3064]</td>
+                <td>0.6L [8355]</td>
+                <td>0.5L [8227]</td>
+              </tr>
+              <tr>
+                <td title="=税收/营业收入(revenue)(%)">G(r)</td>
+                <td></td>
+                <td>15.7r [329]</td>
+                <td>17.7r [325]</td>
+                <td>16.5r [396]</td>
+              </tr>
+              <tr>
+                <td title="=税收/市值(value)(%)">G(v)</td>
+                <td></td>
+                <td>12.3v [73]</td>
+                <td>7.3v [106]</td>
+                <td>5.8v [177]</td>
+              </tr>
+              <tr>
+                <td title="=-lg退税(千元)">-T*</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+            <tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-default">
           <div class="panel-heading">
             税务登记信息
           </div>
@@ -265,6 +346,42 @@
               </tr>
             </thead>
             <tbody>
+              <tr>
+                <td>企业所得税</td>
+                <td>应纳税所得额</td>
+                <td>2015-07-01 00:00:00</td>
+                <td>2015-09-30 00:00:00</td>
+                <td>正税</td>
+                <td>154.12</td>
+                <td>154.12</td>
+                <td>2015-10-25 00:00:00</td>
+                <td>2015-10-13 08:49:04</td>
+                <td>10013216000120019883</td>
+                <td>320161013000005937</td>
+              </tr>
+
+              <tr>
+                <td>增值税</td>
+                <td>商业(17%)</td>
+                <td>2015-10-01 00:00:00</td>
+                <td>2015-10-31 00:00:00</td>
+                <td>正税</td>
+                <td>1163.19</td>
+                <td>1163.19</td>
+                <td>2015-11-15 00:00:00</td>
+                <td>2015-11-03 20:24:02</td>
+                <td>10013216000424603899</td>
+                <td>320161103006011569</td>
+              </tr>
+
+              <tr>
+                <td>2015年</td>
+                <td colspan="10">
+                  <span class="pull-right">
+                    合计：1317.31
+                  </span>
+                </td>
+              </tr>
               {% for o in skjn %}
               <tr>
                 <td>{{o.zsxmDm}}</td>
@@ -280,10 +397,19 @@
                 <td>{{o.dzsphm}}</td>
               </tr>
               {% endfor %}
+              <tr>
+                <td>2016年</td>
+                <td colspan="10">
+                  <span class="pull-right">
+                    合计：{{skjn_hj}}
+                  </span>
+                </td>
+              </tr>
             <tbody>
           </table>
         </div>
       </div>
+
     </div>
 
     <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>

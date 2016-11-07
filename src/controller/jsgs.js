@@ -123,6 +123,7 @@ export default class extends Base {
     if(res.body){
       skjn = JSON.parse(JSON.parse(res.body).DATA).rows;
     }
+    let skjn_hj = _.sumBy(skjn,o=>parseFloat(o.sjse));
 
     await this.httpPost('http://etax.jsgs.gov.cn/portal//user/my_app/forbiddenApp.do');
     await this.httpPost('http://etax.jsgs.gov.cn/portal/home/index/shortcut_appmanage.do', {
@@ -209,7 +210,15 @@ export default class extends Base {
       //
       // console.log(sbList);
 
-    this.assign({info,swdjxx,tzfxx,skjn});
+    let grid = {
+      a:[],c:[]
+    };
+
+    grid.a[0] = (Math.log(skjn_hj / 1000) / Math.log(10)).toFixed(2);
+
+    grid.c[0] = (100 * skjn_hj / parseFloat(swdjxx.ZCZB)).toFixed(2);
+
+    this.assign({info,swdjxx,tzfxx,skjn, skjn_hj, grid});
 
     return this.display();
   }
