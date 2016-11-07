@@ -46,14 +46,22 @@ export default class extends Base {
         execution, lt, _eventId
       };
 
-      await new Promise((resolve, reject)=>{
+      let body = await new Promise((resolve, reject)=>{
         httpClient.post(`http://etax.jsgs.gov.cn${action}`, {form,followAllRedirects:true}, (error, response, body)=>{
           if(error) reject(error);
           else resolve(body);
         });
       });
 
-      this.success({redirect:'/jsgs/show'});
+      let m = body.match(/layerHandler[.]alert[(]"(.*)"[)]/g);
+      console.log(m);
+      if(m){
+        let msg = m[2].match(/layerHandler[.]alert[(]"(.*)"[)]/)[1];
+        this.error(msg);
+      }else{
+        this.success({redirect:'/jsgs/show'});
+      }
+
     }
     else{
       let result = await new Promise((resolve, reject)=>{
