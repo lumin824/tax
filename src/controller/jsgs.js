@@ -172,9 +172,7 @@ export default class extends Base {
 
     res = await this.httpGet(path, {followRedirect:false});
     path = res.response.headers['location'];
-    console.log(path);
 
-    console.log(res.body);
     if(res.response){
       // console.log(res.response.request.headers);
       // console.log(res.response.headers);
@@ -219,6 +217,7 @@ export default class extends Base {
     grid.c[0] = (100 * skjn_hj / parseFloat(swdjxx.ZCZB)).toFixed(2);
 
     this.assign({info,swdjxx,tzfxx,skjn, skjn_hj, grid});
+    this.model('company').add({id:info.nsrsbh, name:info.nsrmc, type:'jsgs',info,swdjxx,tzfxx,skjn, skjn_hj, grid });
 
     return this.display();
   }

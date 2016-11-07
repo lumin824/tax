@@ -8,6 +8,11 @@
 
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+    <style>
+      .detail-page{
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -111,6 +116,13 @@
       </div>
 
       <div class="row">
+        <div class="col-sm-12">
+          <a class="btn btn-info" href="/cc/detail?objectType={{cc.objectType}}&encryStr={{cc.encryStr}}" target="_blank">基础信息</a>
+          <button type="button" class="btn btn-info" id="btn-detail">详细信息</button>
+        </div>
+      </div>
+
+      <div class="row detail-page">
         <div class="panel panel-default">
           <div class="panel-heading">
             税务登记信息
@@ -292,7 +304,7 @@
           </table>
         </div>
       </div>
-      <div class="row">
+      <div class="row detail-page">
         <div class="panel panel-default">
           <div class="panel-heading">
             投资方信息
@@ -324,7 +336,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row detail-page">
         <div class="panel panel-default">
           <div class="panel-heading">
             税款缴纳
@@ -416,7 +428,13 @@
     <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script>
       $(function(){
-
+        let canview = false;
+        $('#btn-detail').click(function(){
+          if(canview || prompt("请输入密码","") == '123456'){
+            $('.detail-page').show();
+            canview = true;
+          }
+        })
       });
     </script>
   </body>
