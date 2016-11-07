@@ -67,7 +67,10 @@ export default class extends Base {
     httpClient.get('http://wsbs.sc-n-tax.gov.cn/vcode').pipe(this.http.res);
   }
 
+
+
   async showAction(){
+    console.log(0);
     let httpClient = await this.getOrCreateHttpClient();
     let dataList = [];
     for(let i = 1; i <= 100; i++){
@@ -75,16 +78,91 @@ export default class extends Base {
       if(!_.size(list[0])) break;
       dataList.push(...list);
     }
-    let qyjbxx = await new Promise((resolve, reject)=>{
-      httpClient.get('http://wsbs.sc-n-tax.gov.cn/inc/intoWssb.htm', (error, response, body)=>{
-        if(error)reject(error);
-        else{
-          let $ = cheerio.load(body);
-          resolve(JSON.parse($('#qyjbxxDiv').text()));
-        }
-      });
+    let res;
+    let qyjbxx;
+    res = await this.httpGet('http://wsbs.sc-n-tax.gov.cn/inc/intoWssb.htm');
+    if(res.body){
+      let $ = cheerio.load(res.body);
+      qyjbxx = JSON.parse($('#qyjbxxDiv').text());
+    }
+    console.log(1);
+    let sbList = [];
+    res = await this.httpPost('http://shenbao.sc-n-tax.gov.cn/Cnct_Web/menus/ysbxxcx/ajax_ysbxxCx_lssbGyxx.action', {
+      form:{sssq_q:'2009-11-01',sssq_z:'2016-11-30',zsxm_dm:'10104'}
     });
-    this.assign({dataList, qyjbxx});
+    if(res.body){
+      sbList = JSON.parse(res.body).lssbGyxx.business.returnData;
+    }
+
+    console.log(2);
+    let filterParams = [
+      {sssq_z:'2016-09-30'},
+      {sssq_q:'2015-01-01',sssq_z:'2015-12-31'},
+      {sssq_q:'2014-01-01',sssq_z:'2014-12-31'},
+      {sssq_q:'2013-01-01',sssq_z:'2013-12-31'}
+    ];
+
+    console.log(3);
+    let ljyysrList = await Promise.all(_.map(filterParams, async o=>{
+      let sb = _.find(sbList, o);
+      let ljyysr = {};
+      if(sb.pzzl_dm == 'BDA0610756'){ // A
+        let url = 'http://shenbao.sc-n-tax.gov.cn/Cnct_Web/tables_print/sds/jdsdsa/ajax_ysbxxCx_ysbxxCx.action';
+        let res = await this.httpPost(url, {
+          form:{sbuuid:sb.sbuuid,pzzl_dm:sb.pzzl_dm}
+        });
+        if(res.body){
+          let zb = JSON.parse(res.body).Mx.business.returnData.zbKeys;
+          ljyysr = _.find(zb, {zblc:'2'});
+        }
+      }else if(sb.pzzl_dm == 'BDA0610764'){ // B
+        let url = 'http://shenbao.sc-n-tax.gov.cn/Cnct_Web/tables_print/sds/jdsdsb/ajax_ysbxxCx_ysbxxCx.action';
+        let res = await this.httpPost(url, {
+          form:{sbuuid:sb.sbuuid,pzzl_dm:sb.pzzl_dm}
+        });
+        if(res.body){
+          let zb = JSON.parse(res.body).Mx.business.returnData.zb;
+          ljyysr = _.find(zb, {zblc:'1'});
+        }
+      }
+
+      return {
+        year:o.sssq_z.substr(0,4),
+        yysr: parseFloat(ljyysr.ljje)
+      };
+    }));
+    console.log(4);
+    let jkList = [];
+    res = await this.httpPost('http://shenbao.sc-n-tax.gov.cn/Cnct_Web/menus/kkgl/ajax_kkxxgl_yKkxxCx.action', {
+      form:{jsrqq:'2012-01-01',jsrqz:'2017-01-01'}
+    });
+    if(res.body){
+      jkList = JSON.parse(res.body).ykkxx.business.returnData.kkxx;
+
+      jkList = _.map(_.groupBy(jkList, o=>o.sssq_z.substr(0,4)), (o2,k2)=>({
+        year: k2,
+        jk:_.sumBy(o2, o3=>parseFloat(o3.kkse))
+      }));
+    }
+    console.log(5);
+    let cc = await this.findcc(qyjbxx.nsrmc);
+
+    let gridData = _.groupBy([{year:'2016'},{year:'2015'},{year:'2014'},{year:'2013'},...ljyysrList,...jkList], 'year');
+    gridData = _.mapValues(gridData,o=>_.merge(...o));
+    gridData = _.mapValues(gridData,o=>{
+
+      return {
+        c: (o.jk) ? (100*o.jk/cc.jcxx.zczj).toFixed(2):'',
+        r: (o.jk&&o.yysr) ? (100*o.jk/o.yysr).toFixed(2) : '',
+      }
+    });
+
+    let grid = {
+      c:[gridData['2016'].c,gridData['2015'].c,gridData['2014'].c,gridData['2013'].c],
+      r:[gridData['2016'].r,gridData['2015'].r,gridData['2014'].r,gridData['2013'].r]
+    };
+
+    this.assign({dataList, qyjbxx, grid});
     return this.display();
   }
 }

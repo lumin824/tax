@@ -11,6 +11,88 @@
   </head>
   <body>
     <div class="container">
+
+      <div class="row">
+        <div class="panel panel-default">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>T(x)*G(y)</th>
+                <th>2016.11</th>
+                <th>2015.12</th>
+                <th>2014.12</th>
+                <th>2013.12</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td title="=lg实缴税收(千元)">T¥*</td>
+                <td>{{grid.a[0]}}*</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/总资产(assets)(%)">G(a)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/总资本(capital)(%)">G(c)</td>
+                <td>{{grid.c[0] and grid.c[0]+'c'}}</td>
+                <td>{{grid.c[1] and grid.c[1]+'c'}}</td>
+                <td>{{grid.c[2] and grid.c[2]+'c'}}</td>
+                <td>{{grid.c[3] and grid.c[3]+'c'}}</td>
+              </tr>
+              <tr>
+                <td title="=税收/总权益(equity)(%)">G(e)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/财务费用(interest)">G(i)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/总负债(liability)(%)">G(L)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/营业收入(revenue)(%)">G(r)</td>
+                <td>{{grid.r[0] and grid.r[0]+'r'}}</td>
+                <td>{{grid.r[1] and grid.r[1]+'r'}}</td>
+                <td>{{grid.r[2] and grid.r[2]+'r'}}</td>
+                <td>{{grid.r[3] and grid.r[3]+'r'}}</td>
+              </tr>
+              <tr>
+                <td title="=税收/市值(value)(%)">G(v)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=-lg退税(千元)">-T*</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+            <tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-sm-12">
           <table class="table table-condensed">
