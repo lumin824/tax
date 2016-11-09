@@ -8,6 +8,10 @@ export default class extends Base {
     return this.display();
   }
 
+  areaAction(){
+    return this.display();
+  }
+
   async uploadAction(){
     let body = await this.http.getPayload();
     let { html:content, url:from } = JSON.parse(body);
