@@ -1,0 +1,48 @@
+{% extends 'admin_base.html' %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/plugins/jqgrid/ui.jqgrid.css">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-12 jqgrid-wrapper">
+
+    <table id="jqgrid"></table>
+    <div id="jqgrid-pager"></div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/plugins/jqgrid/i18n/grid.locale-cn.js"></script>
+<script src="/static/js/plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script>
+  $(function(){
+    $.jgrid.defaults.styleUI = 'Bootstrap';
+    $('#jqgrid').jqGrid({
+      url:'/admin/user',
+      colModel:[
+        {name:'id'},
+        {name:'username'},
+        {name:'mobile'}
+      ],
+      caption:'用户',
+      datatype: 'json',
+      autowidth: true,
+      pager: '#jqgrid-pager',
+      rowNum: 20,
+      rowList: [10, 20, 30],
+    });
+
+    $(window).bind('resize', function () {
+        $('#jqgrid').each(function(){
+          var width = $(this).parents('.jqgrid-wrapper').width();
+          console.log(width);
+          $(this).setGridWidth(width);
+        })
+    });
+  });
+</script>
+{% endblock %}

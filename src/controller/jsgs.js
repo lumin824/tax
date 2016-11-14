@@ -54,8 +54,8 @@ export default class extends Base {
       });
 
       let m = body.match(/layerHandler[.]alert[(]"(.*)"[)]/g);
-      console.log(m);
-      if(m){
+      console.log(m.length);
+      if(m.length == 11){
         let msg = m[2].match(/layerHandler[.]alert[(]"(.*)"[)]/)[1];
         this.error(msg);
       }else{
