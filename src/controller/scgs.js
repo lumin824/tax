@@ -152,12 +152,14 @@ export default class extends Base {
     gridData = _.mapValues(gridData,o=>{
 
       return {
+        lt: o.jk > 1000 ? (Math.log(o.jk/1000) / Math.log(10)).toFixed(2):0,
         c: (o.jk) ? (100*o.jk/cc.jcxx.zczj).toFixed(2):'',
         r: (o.jk&&o.yysr) ? (100*o.jk/o.yysr).toFixed(2) : '',
       }
     });
 
     let grid = {
+      lt:[gridData['2016'].lt,gridData['2015'].lt,gridData['2014'].lt,gridData['2013'].lt],
       c:[gridData['2016'].c,gridData['2015'].c,gridData['2014'].c,gridData['2013'].c],
       r:[gridData['2016'].r,gridData['2015'].r,gridData['2014'].r,gridData['2013'].r]
     };

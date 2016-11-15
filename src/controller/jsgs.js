@@ -216,10 +216,10 @@ export default class extends Base {
       // console.log(sbList);
 
     let grid = {
-      a:[],c:[]
+      lt:[],c:[]
     };
 
-    grid.a[0] = (Math.log(skjn_hj / 1000) / Math.log(10)).toFixed(2);
+    grid.lt[0] = (Math.log(skjn_hj / 1000) / Math.log(10)).toFixed(2);
 
     grid.c[0] = (100 * skjn_hj / parseFloat(swdjxx.ZCZB)).toFixed(2);
 
