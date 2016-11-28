@@ -1,0 +1,103 @@
+{% extends "admin_base.html" %}
+
+{% set plugin_jqgrid = true %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>公司核查</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="jqGrid_wrapper">
+                    <table id="jqGrid_table"></table>
+                    <div id="jqGrid_pager"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(function () {
+        $.jgrid.defaults.styleUI = 'Bootstrap';
+        $("#jqGrid_table").jqGrid({
+            url:'/admin/company_check',
+            editurl:'/admin/company_check_edit',
+            colNames: ['序号', '关联公司', '来源','创建时间', '核查结果', '操作'],
+            colModel: [
+                {
+                    name: 'id',
+                    editable: false,
+                    width: 60,
+                    search: true
+                },
+                {
+                    name: 'company_name',
+                    editable: true,
+                    width: 180
+                },
+                {
+                    name: 'from',
+                    editable: true,
+                    width: 180
+                },
+                {
+                    name: 'create_time',
+                    editable: false,
+                    width: 160,
+                    formatter:'date',
+                    formatoptions: { srcformat:'u', newformat:'Y-m-d H:i:s'}
+                },
+                {
+                    name: 'result',
+                    editable: false,
+                    width: 80
+                },
+                {
+                    name: 'id',
+                    width: 100,
+                    sortable: false,
+                    formatter: function(cell, opt, row){
+                      return ''
+                      + ' <a class="btn btn-primary btn-xs" href="/admin/company_check_process?id='+cell+'" >处理</a>';
+                    }
+                }
+            ],
+            datatype: 'json',
+            height: 450,
+            autowidth: true,
+            shrinkToFit: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: "#jqGrid_pager",
+            viewrecords: true,
+            add: true,
+            edit: true,
+            addtext: 'Add',
+            edittext: 'Edit',
+            hidegrid: false,
+            multiselect: true,
+        });
+
+        // Setup buttons
+        $("#jqGrid_table").jqGrid('navGrid', '#jqGrid_pager', {
+            edit: false,
+            add: false,
+            del: true,
+            search: true
+        }, {
+            reloadAfterSubmit: true
+        });
+
+        // Add responsive to jqGrid
+        $(window).bind('resize', function () {
+            var width = $('.jqGrid_wrapper').width();
+            $('#jqGrid_table').setGridWidth(width);
+        });
+    });
+</script>
+{% endblock %}

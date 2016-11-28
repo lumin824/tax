@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>申请审核－国赋资信</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              公司基本信息
+            </div>
+            <div class="panel-body">
+              {% if item.gs_errmsg %}
+              <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                  <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                国税:{{item.gs_errmsg}},{{item.gs_errno}}
+              </div>
+              {% endif %}
+              {% if item.ds_errmsg %}
+              <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert">
+                  <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                地税:{{item.ds_errmsg}},{{item.ds_errno}}
+              </div>
+              {% endif %}
+
+              <form class="form-horizontal" role="form" method="post" action="/company/apply">
+                <input type="hidden" name="id" value="{{item.id}}" />
+                <div class="form-group">
+                  <div class="col-xs-12">
+                    <input class="form-control" id="name" name="name" type="text" value="{{item.name}}" val="盐城市华璧机械制造有限公司" placeholder="公司名称">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-xs-12">
+                    <input class="form-control" id="uscc" name="uscc" type="text" value="{{item.uscc}}" val="913209036841211281" placeholder="社会信用代码">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-xs-6 {{'has-error' if item.gs_errno == 'ERR_01'}}">
+                    <input class="form-control" id="gs_username" name="gs_username" type="text" value="{{item.gs_username}}" val="913209036841211281" placeholder="国税代码">
+                  </div>
+
+                  <div class="col-xs-6 {{'has-error' if item.ds_errno == 'ERR_01'}}">
+                    <input class="form-control" id="ds_username" name="ds_username" type="text" value="{{item.ds_username}}" val="320900001105753" placeholder="地税代码">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-xs-6 {{'has-error' if item.gs_errno == 'ERR_02'}}">
+                    <input class="form-control" id="gs_password" name="gs_password" type="password" value="{{item.gs_password}}" placeholder="国税密码">
+                  </div>
+                  <div class="col-xs-6 {{'has-error' if item.ds_errno == 'ERR_02'}}">
+                    <input class="form-control" id="ds_password" name="ds_password" type="password" value="{{item.ds_password}}" placeholder="地税密码">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-xs-12 text-center">
+                    <button type="submit" class="btn btn-default">申请审核</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery-validate/1.13.0/jquery.validate.min.js"></script>
+    <script src="//cdn.bootcss.com/lodash.js/4.16.4/lodash.min.js"></script>
+    <script src="//cdn.bootcss.com/moment.js/2.15.2/moment.min.js"></script>
+    <script>
+      $(function(){
+
+        reloadCaptcha = function(){
+          $('#img-captcha').attr('src', '/jsgs/captcha?_='+moment().unix());
+        }
+        $('form').validate({
+          submitHandler:function(form){
+            var $form = $(form);
+            var data = _.reduce($form.serializeArray(), function(result, o){
+              result[o.name] = o.value;
+              return result;
+            }, {});
+
+            var url = $form.attr('action');
+            var type = $form.attr('method');
+            $.ajax({
+              url: url,
+              type: type,
+              data: data,
+              success: function(resp){
+                if(resp.errno == 0){
+                  alert('申请审核成功');
+                  if(resp.data.redirect) location.href = resp.data.redirect;
+                  else if(resp.data.reload) location.reload();
+                }else{
+                  reloadCaptcha();
+                  alert(resp.errmsg);
+                }
+              }
+            });
+          }
+        })
+      });
+    </script>
+  </body>
+</html>

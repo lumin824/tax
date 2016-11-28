@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{item.name}}</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="row">
+        <div class="panel panel-default">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>T(x)*G(y)</th>
+                <th>2016.11</th>
+                <th>2015.12</th>
+                <th>2014.12</th>
+                <th>2013.12</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td title="=lg实缴税收(千元)">T¥*</td>
+                <td>{{grid.lt[0]}}*</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/总资产(assets)(%)">G(a)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/总资本(capital)(%)">G(c)</td>
+                <td>{{grid.c[0]}}c</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/总权益(equity)(%)">G(e)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/财务费用(interest)">G(i)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/总负债(liability)(%)">G(L)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/营业收入(revenue)(%)">G(r)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=税收/市值(value)(%)">G(v)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td title="=-lg退税(千元)">-T*</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+            <tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            税款明细
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>金额</th>
+                <th>时间</th>
+                <th>备注</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in resultJson.taxList %}
+              <tr>
+                <td>{{o.name}}</td>
+                <td>{{o.money}}</td>
+                <td>{{o.time}}</td>
+                <td>{{o.remark}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            result
+          </div>
+          <div class="panel-body">
+            {{item.result}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script>
+      $(function(){
+
+      });
+    </script>
+  </body>
+</html>

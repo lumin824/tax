@@ -1,0 +1,133 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <form class="ibox float-e-margins" method="post" action="/admin/company_edit">
+            <div class="ibox-title">
+                <h5>公司信息</h5>
+                <div class="ibox-tools">
+                    <button class="btn btn-primary btn-xs" type="submit">{{'保存' if item.id else '添加'}}</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="form-horizontal">
+                    <input type="hidden" name="id" value="{{item.id}}">
+                    <input type="hidden" name="oper" value="{{'edit' if item and item.id else 'add'}}">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" value="{{item.name}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="uscc" value="{{item.uscc}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>评级</h5>
+                <div class="ibox-tools">
+                    <a class="btn btn-primary btn-xs" href="/admin/company_level_edit?company_id={{item.id}}" >添加评级</a>
+                </div>
+            </div>
+            <div class="ibox-content">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>阶段</th>
+                    <th>T¥*</th>
+                    <th>G(a)</th>
+                    <th>G(c)</th>
+                    <th>G(e)</th>
+                    <th>G(i)</th>
+                    <th>G(L)</th>
+                    <th>G(r)</th>
+                    <th>G(v)</th>
+                    <th>-T*</th>
+                    <th>是否显示</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for o in levelList %}
+                  <tr>
+                    <td>{{o.stage}}</td>
+                    <td>{{o.d1}}</td>
+                    <td>{{o.d2}}</td>
+                    <td>{{o.d3}}</td>
+                    <td>{{o.d4}}</td>
+                    <td>{{o.d5}}</td>
+                    <td>{{o.d6}}</td>
+                    <td>{{o.d7}}</td>
+                    <td>{{o.d8}}</td>
+                    <td>{{o.d9}}</td>
+                    <td>{{o.is_visible}}</td>
+                    <td><a class="btn btn-primary btn-xs" href="/admin/company_level_edit?id={{o.id}}" >编辑</a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              <table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!-- jQuery Validation plugin javascript-->
+<script src="/static/hp/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="/static/hp/js/plugins/validate/messages_zh.min.js"></script>
+<script>
+    $(function(){
+        $('form').validate({
+          messages: {
+            username:{
+              required:'请输入用户名'
+            },
+            password:{
+              required:'请输入密码'
+            }
+          },
+          submitHandler:function(form){
+            var $form = $(form);
+
+            var data = _.reduce($form.serializeArray(), function(result, o){
+              var val = result[o.name];
+              val = val ? (val + ',' + o.value) : o.value;
+              result[o.name] = val;
+              return result;
+            }, {});
+
+            var url = $form.attr('action');
+            var type = $form.attr('method')
+            $.ajax({
+              url: url,
+              type: type,
+              data: data,
+              success: function(resp){
+                if(resp.errno == 0){
+                  alert('操作成功')
+                  if(resp.data.redirect) window.location.href = resp.data.redirect;
+                  else history.go(-1);
+                }else{
+                  alert(resp.errmsg);
+                }
+              }
+            });
+          }
+        });
+    });
+</script>
+{% endblock %}

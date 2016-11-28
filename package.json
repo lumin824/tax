@@ -11,9 +11,11 @@
   "dependencies": {
     "babel-runtime": "6.x.x",
     "cheerio": "0.22.0",
+    "gm": "1.23.0",
     "iconv-lite": "0.4.13",
     "lodash": "4.16.4",
     "moment": "2.15.1",
+    "node-tesseract": "0.2.7",
     "node-uuid": "1.4.7",
     "nunjucks": "2.2.0",
     "request": "2.75.0",

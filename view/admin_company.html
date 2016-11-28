@@ -1,0 +1,115 @@
+{% extends "admin_base.html" %}
+
+{% set plugin_jqgrid = true %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h5>公司</h5>
+                <div class="ibox-tools">
+                    <a class="btn btn-primary btn-xs" href="/admin/company_edit" >创建公司</a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="jqGrid_wrapper">
+                    <table id="jqGrid_table"></table>
+                    <div id="jqGrid_pager"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(function () {
+        $.jgrid.defaults.styleUI = 'Bootstrap';
+        $("#jqGrid_table").jqGrid({
+            url:'/admin/company',
+            editurl:'/admin/company_edit',
+            colNames: ['序号', '名称', '统一社会信用代码', '项目地址', '项目所属县市', '基本信息', '建设内容','操作'],
+            colModel: [
+                {
+                    name: 'id',
+                    editable: false,
+                    width: 60,
+                    search: true
+                },
+                {
+                    name: 'name',
+                    editable: true,
+                    width: 180
+                },
+                {
+                    name: 'uscc',
+                    editable: false,
+                    width: 180
+                },
+                {
+                    name: 'address',
+                    editable: false,
+                    width: 80
+                },
+                {
+                    name: 'area_name',
+                    editable: false,
+                    width: 80
+                },
+                {
+                    name: 'info',
+                    editable: false,
+                    width: 80
+                },
+                {
+                    name: 'content',
+                    editable: false,
+                    width: 80
+                },
+                {
+                    name: 'id',
+                    width: 100,
+                    sortable: false,
+                    formatter: function(cell, opt, row){
+                      return ''
+                      + ' <a class="btn btn-primary btn-xs" href="/admin/company_edit?id='+cell+'" >编辑</a>'
+                      + ' <a class="btn btn-primary btn-xs" href="/company?id='+cell+'" target="_blank">查看</a>';
+                    }
+                }
+            ],
+            datatype: 'json',
+            height: 450,
+            autowidth: true,
+            shrinkToFit: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            pager: "#jqGrid_pager",
+            viewrecords: true,
+            add: true,
+            edit: true,
+            addtext: 'Add',
+            edittext: 'Edit',
+            hidegrid: false,
+            multiselect: true,
+        });
+
+        // Setup buttons
+        $("#jqGrid_table").jqGrid('navGrid', '#jqGrid_pager', {
+            edit: false,
+            add: false,
+            del: true,
+            search: true
+        }, {
+            reloadAfterSubmit: true
+        });
+
+        // Add responsive to jqGrid
+        $(window).bind('resize', function () {
+            var width = $('.jqGrid_wrapper').width();
+            $('#jqGrid_table').setGridWidth(width);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{item.name}} - 国赋资信</title>
+
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="row">
+        <div class="col-sm-12">
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <td width="150px">公司名称</td>
+                <td>{{item.name}}</td>
+              </tr>
+              <tr>
+                <td>社会统一信用代码</td>
+                <td>{{item.uscc}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="panel panel-default">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>T(x)*G(y)</th>
+                {% for o in levelList %}
+                <th>{{o.stage}}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td title="=lg实缴税收(千元)">T¥*</td>
+                {% for o in levelList %}
+                <td>{{o.d1}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td title="=税收/总资产(assets)(%)">G(a)</td>
+                {% for o in levelList %}
+                <td>{{o.d2}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td title="=税收/总资本(capital)(%)">G(c)</td>
+                {% for o in levelList %}
+                <td>{{o.d3}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td title="=税收/总权益(equity)(%)">G(e)</td>
+                {% for o in levelList %}
+                <td>{{o.d4}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td title="=税收/财务费用(interest)">G(i)</td>
+                {% for o in levelList %}
+                <td>{{o.d5}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td title="=税收/总负债(liability)(%)">G(L)</td>
+                {% for o in levelList %}
+                <td>{{o.d6}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td title="=税收/营业收入(revenue)(%)">G(r)</td>
+                {% for o in levelList %}
+                <td>{{o.d7}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td title="=税收/市值(value)(%)">G(v)</td>
+                {% for o in levelList %}
+                <td>{{o.d8}}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td title="=-lg退税(千元)">-T*</td>
+                {% for o in levelList %}
+                <td>{{o.d9}}</td>
+                {% endfor %}
+              </tr>
+            <tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script>
+      $(function(){
+
+      });
+    </script>
+  </body>
+</html>

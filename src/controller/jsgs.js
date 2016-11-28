@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import cheerio from 'cheerio';
 import _ from 'lodash';
 import url from 'url';
+import moment from 'moment';
 
 export default class extends Base {
   async indexAction(){
@@ -58,7 +59,40 @@ export default class extends Base {
         let msg = m[2].match(/layerHandler[.]alert[(]"(.*)"[)]/)[1];
         this.error(msg);
       }else{
-        this.success({redirect:'/jsgs/show'});
+        let data = await this.fetch();
+        let {info} = data;
+        if(info.nsrsbh){
+          let company = await this.model('company').where({uscc:info.nsrsbh}).find();
+          let company_id;
+          if(think.isEmpty(company)){
+            company_id = await this.model('company').add({name:info.nsrmc, uscc:info.nsrsbh});
+          }else{
+            company_id = company.id;
+            await this.model('company').where({id:company_id}).update({name:info.nsrmc});
+          }
+
+          let format_info = {
+            base: {
+              name: info.nsrmc
+            }
+          }
+
+          let check_id = await this.model('company_check').add({
+            create_time: moment().unix(),
+            company_id,from:'江苏国税',
+            auth_info:JSON.stringify({username, password}),
+            fetch_info:JSON.stringify({
+              ...data,type:'jsgs'
+            }),
+            format_text:JSON.stringify(format_info)
+          })
+          this.success({redirect:`/company/check?id=${check_id}`});
+        }
+
+        // let check_id = await this.model('company_check').add({
+        //
+        // })
+
       }
 
     }
@@ -84,6 +118,14 @@ export default class extends Base {
   }
 
   async showAction(){
+    let data = await this.fetch();
+    this.assign(data);
+    //this.model('company').add({id:info.nsrsbh, name:info.nsrmc, type:'jsgs',info,swdjxx,tzfxx,skjn, skjn_hj, grid });
+
+    return this.display();
+  }
+
+  async fetch(){
     let httpClient = await this.getOrCreateHttpClient();
     let res;
 
@@ -223,9 +265,8 @@ export default class extends Base {
 
     grid.c[0] = (100 * skjn_hj / parseFloat(swdjxx.ZCZB)).toFixed(2);
 
-    this.assign({info,swdjxx,tzfxx,skjn, skjn_hj, grid});
-    this.model('company').add({id:info.nsrsbh, name:info.nsrmc, type:'jsgs',info,swdjxx,tzfxx,skjn, skjn_hj, grid });
 
-    return this.display();
+
+    return {info,swdjxx,tzfxx,skjn, skjn_hj, grid};
   }
 }
