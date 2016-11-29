@@ -27,24 +27,24 @@
             <tbody>
               <tr>
                 <td title="=lg实缴税收(千元)">T¥*</td>
-                <td>{{grid.lt[0]}}*</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{resultJson.taxValue['2016'].ts}}*</td>
+                <td>{{resultJson.taxValue['2015'].ts}}*</td>
+                <td>{{resultJson.taxValue['2014'].ts}}*</td>
+                <td>{{resultJson.taxValue['2013'].ts}}*</td>
               </tr>
               <tr>
                 <td title="=税收/总资产(assets)(%)">G(a)</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{resultJson.taxValue['2016'].ga}}a</td>
+                <td>{{resultJson.taxValue['2015'].ga}}a</td>
+                <td>{{resultJson.taxValue['2014'].ga}}a</td>
+                <td>{{resultJson.taxValue['2013'].ga}}a</td>
               </tr>
               <tr>
                 <td title="=税收/总资本(capital)(%)">G(c)</td>
-                <td>{{grid.c[0]}}c</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{resultJson.taxValue['2016'].gc}}c</td>
+                <td>{{resultJson.taxValue['2015'].gc}}c</td>
+                <td>{{resultJson.taxValue['2014'].gc}}c</td>
+                <td>{{resultJson.taxValue['2013'].gc}}c</td>
               </tr>
               <tr>
                 <td title="=税收/总权益(equity)(%)">G(e)</td>

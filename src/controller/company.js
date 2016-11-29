@@ -83,22 +83,37 @@ export default class extends Base {
         let gs_data = await gs_api.data(),
             ds_data = await ds_api.data();
 
+        let info = {
+          ...ds_data.info, ...gs_data.info
+        };
+
+        let cwbbList = _.mapValues(_.mapKeys(ds_data.cwbbList,'year'),o=>{
+          let {year, ...oth} = o;
+          return oth;
+        });
+
+
+        let taxList = _.sortBy([...gs_data.taxList, ...ds_data.taxList],'time');
+        let taxValue = _.mapValues(_.groupBy(taxList, o=>o.time.split('-')[0]), o=>({tax:_.sumBy(o, o=>parseFloat(o.money))}));
+        let { zczb } = info;
+        zczb = parseInt(zczb);
+
+        taxValue = _.merge(taxValue,cwbbList);
+
+        taxValue = _.mapValues(taxValue, o=>({
+          ...o,
+          ts:o.tax > 1000 ? (Math.log(o.tax/1000)/Math.log(10)).toFixed(2) : '0.00',
+          ga:o.assets ? (100*o.tax/parseFloat(o.assets)).toFixed(2) : '0.00',
+          gc:(100*o.tax/zczb).toFixed(2)
+        }));
+
         let result = {
           gs_data,
           ds_data,
-          taxList: _.sortBy([...gs_data.taxList, ...ds_data.taxList],'time'),
-          info: {
-            ...ds_data.info, ...gs_data.info
-          }
+          taxList,
+          taxValue,
+          info
         };
-
-        // let cc_api = new CcAPI();
-        // let ccList = await cc_api.search({
-        //   keyword:result.info.name
-        // });
-        //
-        // let ccInfo = _.find(ccList, {name:result.info.name});
-        // ccInfo = await cc_api.detail(ccInfo);
 
         result = JSON.stringify(result);
         this.model('company_apply').where({id}).update({result});

@@ -132,6 +132,70 @@ export default class extends Base {
     });
   }
 
+  async fetch_cwbb(sbnf){
+    let { sessionId } = this._logininfo;
+    let swglm = sessionId.split(';')[0];
+    let cwbbjdqx = 'Y01_120';
+    let res = await this.httpPost('http://www.jsds.gov.cn/wb032_WBcwbbListAction.do', {
+      qs: {sessionId},
+      form: {
+        sbnf,cwbbErrzt:'1',cwbbdldm:'CKL',errorMessage:'',
+        swglm,curpzxh:'',handleDesc:'',handleCode:'submitSave',
+        cwbbjdqxmc:'年度终了后4月内',cwbbjdqx
+      }
+    })
+
+    let $ = cheerio.load(res.body);
+    let cwbbList = _.map($('#queryTb tr').toArray().slice(1), o=>{
+      let $td = $('td', o);
+      let deal_args = $td.eq(6).find('input').attr('onclick');
+      deal_args = deal_args.substring(deal_args.indexOf('(')+1,deal_args.lastIndexOf(')'));
+      deal_args = _.map(deal_args.split(','),o=>o.substr(1,o.length-2));
+      let ret = {
+        sbnf,
+        bbzl: $td.eq(1).text().replace(/\s/g,''),
+        url:deal_args[0],
+        ssq:deal_args[1],
+        pzxh:deal_args[2],
+        czzt:deal_args[3],
+        zt:deal_args[4],
+        editzt:deal_args[5],
+        ypzxh:deal_args[6],
+        swglm:deal_args[7],
+        sqssq:deal_args[8],
+        bsqxdm:deal_args[9],
+      };
+      if(ret.pzxh){
+        ret.href = ret.url + "?sessionId=" + sessionId + "&pzxh=" + ret.pzxh + "&ssq=" + encodeURI(ret.ssq) + "&BBZT="
+        + ret.czzt + "&zt=" + ret.zt + "&editzt=" + ret.editzt + "&swglm=" + ret.swglm
+				+ "&bsqxdm=" + ret.bsqxdm+"&cwbbjdqx=" + cwbbjdqx;
+      }else{
+        if (ypzxh != '') {
+    			ret.href = ret.url + "?sessionId=" +sessionId+ "&ssq=" + encodeURI(ret.ssq) + "&BBZT=" + ret.zt
+    					+ "&ypzxh=" + ret.ypzxh + "&swglm=" + ret.swglm + "&sqssq="
+    					+ encodeURI(ret.sqssq) + "&bsqxdm=" + ret.bsqxdm+"&cwbbjdqx="+cwbbjdqx;
+    		} else {
+    			ret.href = ret.url + "?sessionId=" +sessionId+ "&ssq=" + encodeURI(ret.ssq) + "&BBZT=" + ret.zt
+    					+ "&swglm=" + ret.swglm + "&sqssq=" + encodeURI(ret.sqssq)
+    					+ "&bsqxdm=" + ret.bsqxdm+"&cwbbjdqx="+cwbbjdqx;
+    		}
+      }
+      return ret;
+    });
+
+    for(let i in cwbbList){
+      let res = await this.httpGet('http://www.jsds.gov.cn'+cwbbList[i].href);
+      let $ = cheerio.load(res.body);
+
+      let table = $('input').toArray();
+      table = _.mapKeys(table, o=>$(o).attr('id'));
+      table = _.mapValues(table, o=>$(o).val());
+      cwbbList[i].table = table;
+    }
+
+    return cwbbList;
+  }
+
   async data(){
     let { sessionId } = this._logininfo;
 
@@ -145,8 +209,20 @@ export default class extends Base {
       ...(await this.fetch_dzjk('2013-01-01','2016-12-31','','','2'))
     ];
 
+    let cwbb = [
+      ...await this.fetch_cwbb('2016'),
+      ...await this.fetch_cwbb('2015'),
+      ...await this.fetch_cwbb('2014'),
+      ...await this.fetch_cwbb('2013')
+    ];
+
     let taxList = _.map(dzjk, o=>({
       name:o.sbblx,money:o.skhj,time:o.kkrq,remark:'地税-电子缴款'
+    }));
+
+    let cwbbList = _.map(cwbb, o=>({
+      year:o.sbnf,
+      assets:(o.table.zcqmye32 && o.table.zcncye32) ? ((parseFloat(o.table.zcqmye32) + parseFloat(o.table.zcncye32))/2).toFixed(2):''
     }));
 
     let info = {
@@ -155,6 +231,6 @@ export default class extends Base {
     }
     if(nsrjbxx.nsrsbh.length == 18) info.uscc = nsrjbxx.nsrsbh;
 
-    return {nsrjbxx,dzjk,taxList, info};
+    return {nsrjbxx,dzjk,taxList, cwbbList,info, cwbb};
   }
 }
