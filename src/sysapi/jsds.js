@@ -222,7 +222,12 @@ export default class extends Base {
 
     let cwbbList = _.map(cwbb, o=>({
       year:o.sbnf,
-      assets:(o.table.zcqmye32 && o.table.zcncye32) ? ((parseFloat(o.table.zcqmye32) + parseFloat(o.table.zcncye32))/2).toFixed(2):''
+      capital:(parseFloat(o.table.fzqmye27 || '0') + parseFloat(o.table.fzncye27 || '0'))/2,
+      assets:(parseFloat(o.table.zcqmye32 || '0') + parseFloat(o.table.zcncye32 || '0'))/2,
+      equity:(parseFloat(o.table.fzqmye31 || '0') + parseFloat(o.table.fzncye31 || '0'))/2,
+      interest: o.table.bnljje18,
+      liability:(parseFloat(o.table.fzqmye19 || '0') + parseFloat(o.table.fzncye19 || '0'))/2,
+      revenue:parseFloat(o.table.bnljje1 || '0') + parseFloat(o.table.bnljje22 || '0'),
     }));
 
     let info = {

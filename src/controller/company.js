@@ -104,7 +104,11 @@ export default class extends Base {
           ...o,
           ts:o.tax > 1000 ? (Math.log(o.tax/1000)/Math.log(10)).toFixed(2) : '0.00',
           ga:o.assets ? (100*o.tax/parseFloat(o.assets)).toFixed(2) : '0.00',
-          gc:(100*o.tax/zczb).toFixed(2)
+          ge:o.equity ? (100*o.tax/parseFloat(o.equity)).toFixed(2) : '0.00',
+          gi:o.interest ? (o.tax/parseFloat(o.interest)).toFixed(2) :'0.00',
+          gl:o.liability ? (100*o.tax/parseFloat(o.liability)).toFixed(2) : '0.00',
+          gr:o.revenue ? (100*o.tax/parseFloat(o.revenue)).toFixed(2) : '0.00',
+          gc:o.capital ? (100*o.tax/parseFloat(o.capital)).toFixed(2) : '0.00',
         }));
 
         let result = {
