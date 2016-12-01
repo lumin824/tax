@@ -1,6 +1,7 @@
 
 import Base from './base';
 import _ from 'lodash';
+import cheerio from 'cheerio';
 
 export default class extends Base {
 
@@ -83,6 +84,25 @@ export default class extends Base {
       return { ah, frxm, qdyw, blxw, cfjg, je};
     });
 
-    return {fmjl, schmd};
+    let key2code = {'工商注册号':'gszch','法人':'fr','企业类型':'qylx','住所':'zs','成立日期':'clrq'};
+    let info = infos[0][0];
+    info = _.map(info, o=>o.split('：'));
+    info = _.mapKeys(info, o=>{
+      let key = o[0];
+      return key2code[key] || key;
+    });
+    info = _.mapValues(info, o=>o[1]);
+    return {info,infos, fmjl, schmd};
+  }
+
+  async data(name){
+    let list = await this.search({keyword:name});
+
+    let info = _.find(list, {name});
+    if(!info) return {};
+
+    info = await this.detail(info);
+
+    return info;
   }
 }

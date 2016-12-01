@@ -199,6 +199,32 @@ export default class extends Base {
     });
   }
 
+  async fetch_cwbb(begin_skssq,end_skssq){
+    if(!this._cwbbBaseUrl){
+      let { app_mc, ...form } = await this.find_app('shenbao.yjd.cwbb');
+      this._cwbbBaseUrl = await this.to_app(form);
+    }
+
+    let res = await this.httpPost(url.resolve(this._cwbbBaseUrl,'sbcxAction.action'), {
+      qs:{sign:'queryData',sb_type:'16'},
+      form:{begin_skssq,end_skssq,sbrq:'',zt:'1'}
+    });
+
+    let $ = cheerio.load(res.body);
+    return _.map($('table tbody tr').toArray(), o=>{
+      let td = $('td', o);
+      return {
+        nsrsbh:_.trim(td.eq(0).text()),
+        sbbbmc:_.trim(td.eq(1).text()),
+        sbssq:_.trim(td.eq(2).text()),
+        sbrq:_.trim(td.eq(3).text()),
+        ybsk:_.trim(td.eq(4).text()),
+        sbzt:_.trim(td.eq(5).text()),
+        href:$('[name=pdfInfo]', td.eq(6)).val()
+      };
+    });
+  }
+
   async data(){
     let swdjxx = await this.fetch_swdjxx();
     //let skjn = await this.fetch_skjn('2012-01-01','2016-12-31');
@@ -207,12 +233,31 @@ export default class extends Base {
     let taxList = _.map(wspz, o=>(
       {name:o.sksxmc, money:o.sjse, time:o.jkrq, remark:'国税-完税凭证'}
     ));
+
+    let cwbb = await this.fetch_cwbb('2013-01','2017-01');
+
+    let cwbbList = _.map(cwbb, o=>({
+      name: o.sbbbmc,
+      time: o.sbrq,
+      href: o.href,
+      remark: '国税'
+    }))
+
     let info = {
       name: swdjxx.NSRMC,
       nsrsbh: swdjxx.NSRSBH,
-      zczb: swdjxx.ZCZB
+      zczb: swdjxx.ZCZB,
+      zzjgdm: swdjxx.ZZJG_DM,
+      tzfxx: _.map(swdjxx.tzfxx, o=>({
+        tzfmc: o.TZFHHHRMC,
+        jjxz:o.JJXZMC,
+        tzbl:o.TZBL,
+        zjzl:o.SFZJLXMC,
+        zjhm:o.TZFHHHRZJHM,
+        gjdz:o.GJHDQJC,
+      }))
     }
     if(swdjxx.NSRSBH.length == 18) info.uscc = swdjxx.NSRSBH;
-    return {info,swdjxx,wspz,taxList};
+    return {info,swdjxx,wspz,taxList,cwbb, cwbbList};
   }
 }

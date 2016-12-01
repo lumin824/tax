@@ -72,7 +72,17 @@ export default class extends Base {
 
     return {
       nsrmc: $('td', info_tr.eq(1)).eq(1).text(),
-      nsrsbh: $('td', info_tr.eq(0)).eq(3).text()
+      nsrsbh: $('td', info_tr.eq(0)).eq(3).text(),
+      scjyqx: $('td', info_tr.eq(4)).eq(3).text(),
+      zcdz: $('td', info_tr.eq(6)).eq(1).text(),
+      zcdyzbm: $('td', info_tr.eq(7)).eq(1).text(),
+      zcdlxdh: $('td', info_tr.eq(7)).eq(3).text(),
+      scjydz: $('td', info_tr.eq(8)).eq(1).text(),
+      scdyzbm: $('td', info_tr.eq(9)).eq(1).text(),
+      scdlxdh: $('td', info_tr.eq(9)).eq(3).text(),
+      cyrs: $('td', info_tr.eq(11)).eq(1).text(),
+      wjrs: $('input', info_tr.eq(11)).val(),
+      jyfw: $('td', info_tr.eq(13)).eq(1).text(),
     };
   }
 
@@ -220,7 +230,7 @@ export default class extends Base {
       name:o.sbblx,money:o.skhj,time:o.kkrq,remark:'地税-电子缴款'
     }));
 
-    let cwbbList = _.map(cwbb, o=>({
+    let taxMoneyList = _.map(cwbb, o=>({
       year:o.sbnf,
       capital:(parseFloat(o.table.fzqmye27 || '0') + parseFloat(o.table.fzncye27 || '0'))/2,
       assets:(parseFloat(o.table.zcqmye32 || '0') + parseFloat(o.table.zcncye32 || '0'))/2,
@@ -230,12 +240,21 @@ export default class extends Base {
       revenue:parseFloat(o.table.bnljje1 || '0') + parseFloat(o.table.bnljje22 || '0'),
     }));
 
+    let {nsrmc, ...oth} = nsrjbxx;
+
     let info = {
-      name: nsrjbxx.nsrmc,
-      nsrsbh: nsrjbxx.nsrsbh
+      name: nsrmc,
+      ...oth
     }
     if(nsrjbxx.nsrsbh.length == 18) info.uscc = nsrjbxx.nsrsbh;
 
-    return {nsrjbxx,dzjk,taxList, cwbbList,info, cwbb};
+    let cwbbList = _.map(cwbb, o=>({
+      name: o.bbzl,
+      time: o.sbnf,
+      href: 'oookkk',
+      remark: '地税'
+    }))
+
+    return {nsrjbxx,dzjk,taxList,taxMoneyList,info, cwbb,cwbbList};
   }
 }

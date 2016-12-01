@@ -59,7 +59,8 @@ export default class extends Base {
         ret.redirect = `/company/apply?id=${id}`;
       }
       let gs_api = new JsgsAPI(),
-          ds_api = new JsdsAPI();
+          ds_api = new JsdsAPI(),
+          cc_api = new CcAPI();
 
       let login_success = true;
       {
@@ -87,7 +88,14 @@ export default class extends Base {
           ...ds_data.info, ...gs_data.info
         };
 
-        let cwbbList = _.mapValues(_.mapKeys(ds_data.cwbbList,'year'),o=>{
+        let cc_data = await cc_api.data(info.name);
+
+        info = {
+          ...info,
+          ...cc_data.info,
+        };
+
+        let taxMoneyList = _.mapValues(_.mapKeys(ds_data.taxMoneyList,'year'),o=>{
           let {year, ...oth} = o;
           return oth;
         });
@@ -98,25 +106,33 @@ export default class extends Base {
         let { zczb } = info;
         zczb = parseInt(zczb);
 
-        taxValue = _.merge(taxValue,cwbbList);
+        taxValue = _.merge(taxValue,taxMoneyList);
 
         taxValue = _.mapValues(taxValue, o=>({
           ...o,
+          tax:o.tax && o.tax.toFixed(2),
           ts:o.tax > 1000 ? (Math.log(o.tax/1000)/Math.log(10)).toFixed(2) : '0.00',
-          ga:o.assets ? (100*o.tax/parseFloat(o.assets)).toFixed(2) : '0.00',
-          ge:o.equity ? (100*o.tax/parseFloat(o.equity)).toFixed(2) : '0.00',
-          gi:o.interest ? (o.tax/parseFloat(o.interest)).toFixed(2) :'0.00',
-          gl:o.liability ? (100*o.tax/parseFloat(o.liability)).toFixed(2) : '0.00',
-          gr:o.revenue ? (100*o.tax/parseFloat(o.revenue)).toFixed(2) : '0.00',
-          gc:o.capital ? (100*o.tax/parseFloat(o.capital)).toFixed(2) : '0.00',
+          ga:(o.assets && o.tax) ? (100*o.tax/parseFloat(o.assets)).toFixed(2) : '0.00',
+          ge:(o.equity && o.tax) ? (100*o.tax/parseFloat(o.equity)).toFixed(2) : '0.00',
+          gi:(o.interest && o.tax) ? (o.tax/parseFloat(o.interest)).toFixed(2) :'0.00',
+          gl:(o.liability && o.tax) ? (100*o.tax/parseFloat(o.liability)).toFixed(2) : '0.00',
+          gr:(o.revenue && o.tax) ? (100*o.tax/parseFloat(o.revenue)).toFixed(2) : '0.00',
+          gc:(o.capital && o.tax) ? (100*o.tax/parseFloat(o.capital)).toFixed(2) : '0.00',
         }));
+
+        let cwbbList = [
+          ...gs_data.cwbbList,
+          ...ds_data.cwbbList
+        ];
 
         let result = {
           gs_data,
           ds_data,
+          cc_data,
           taxList,
           taxValue,
-          info
+          info,
+          cwbbList
         };
 
         result = JSON.stringify(result);
