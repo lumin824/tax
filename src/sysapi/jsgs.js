@@ -11,6 +11,7 @@ import crypto from 'crypto';
 import cheerio from 'cheerio';
 import url from 'url';
 import moment from 'moment';
+import md5File from 'md5-file';
 
 export default class extends Base {
   fetchCaptcha(){
@@ -225,6 +226,40 @@ export default class extends Base {
     });
   }
 
+  async fetch_pdf(href){
+    if(!this._cwbbBaseUrl){
+      let { app_mc, ...form } = await this.find_app('shenbao.yjd.cwbb');
+      this._cwbbBaseUrl = await this.to_app(form);
+    }
+
+    return Promise.all(_.map(href.split(';'), async o=>{
+      let os = o.split(':');
+
+      let code2name = {
+        '29806001':'资产负债表',
+        '29806002':'利润表',
+        '29806003':'现金流量表'
+      }
+
+      let name = code2name[os[0]] || os[0],
+          uuid = os[1];
+
+      let res = await this.httpPost(url.resolve(this._cwbbBaseUrl,'sbcxAction.action'), {
+        encoding: null,
+        qs:{sign:'getPdfInfo',uuid,type:'download'}
+      });
+
+      let tempFile = `runtime/jsgs_${uuid}.pdf`;
+      fs.writeFileSync(tempFile,res.body);
+      let hash = md5File.sync(tempFile);
+      fs.renameSync(tempFile, think.RUNTIME_PATH + '/archive/' + hash);
+      return { name,hash };
+
+    }));
+
+
+  }
+
   async data(){
     let swdjxx = await this.fetch_swdjxx();
     //let skjn = await this.fetch_skjn('2012-01-01','2016-12-31');
@@ -236,12 +271,25 @@ export default class extends Base {
 
     let cwbb = await this.fetch_cwbb('2013-01','2017-01');
 
-    let cwbbList = _.map(cwbb, o=>({
+    let cwbbList = await Promise.all(_.map(cwbb, async o=>({
       name: o.sbbbmc,
       time: o.sbrq,
-      href: o.href,
+      archiveList: await this.fetch_pdf(o.href),
       remark: '国税'
-    }))
+    })));
+
+
+    // let testhref =
+    // '29806001:29806001-395a69f50c685de79e0e221247d71f32;'
+    // '29806002:29806002-adaa5e169ae7bab4b53d3b8f73afbe10;'
+    //
+    // '29806001:29806001-1c660ae7608cf5b1d2c1ac0799fe64d1;'
+    // '29806002:29806002-d189bd59415ae05e2f678eab8a16b251;'
+    // '29806003:29806003-4de6bb720428891190a1d3cdf9c1c7d2;'
+    //
+    // '29806001:29806001-0e19d727ab9248affe3019d93c476131;'
+    // '29806002:29806002-77991fef77ce015acbfb16f9f0ed815f;'
+    // '29806003:29806003-212e11f912a9b1ace658041d84599a97;'
 
     let info = {
       name: swdjxx.NSRMC,

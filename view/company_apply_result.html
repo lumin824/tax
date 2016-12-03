@@ -363,7 +363,12 @@
                     <td>{{o.name}}</td>
                     <td>{{o.time}}</td>
                     <td>{{o.remark}}</td>
-                    <td><a href="{{o.href}}" target="_blank">查看</a></td>
+                    <td>
+                      {% for p in o.archiveList %}
+                      <a href="/archive/view?hash={{p.hash}}&type={{p.type}}" target="_blank">{{p.name}}</a>
+                      {% endfor %}
+
+                    </td>
                   </tr>
                   {% endfor %}
 
