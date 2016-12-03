@@ -236,12 +236,14 @@ export default class extends Base {
       let os = o.split(':');
 
       let code2name = {
-        '29806001':'资产负债表',
-        '29806002':'利润表',
-        '29806003':'现金流量表'
+        '1':'资产负债表',
+        '2':'利润表',
+        '3':'现金流量表'
       }
 
-      let name = code2name[os[0]] || os[0],
+      let code = os[0];
+      let endCode = code.charAt(code.length-1);
+      let name = code2name[endCode] || code,
           uuid = os[1];
 
       let res = await this.httpPost(url.resolve(this._cwbbBaseUrl,'sbcxAction.action'), {
@@ -277,19 +279,6 @@ export default class extends Base {
       archiveList: await this.fetch_pdf(o.href),
       remark: '国税'
     })));
-
-
-    // let testhref =
-    // '29806001:29806001-395a69f50c685de79e0e221247d71f32;'
-    // '29806002:29806002-adaa5e169ae7bab4b53d3b8f73afbe10;'
-    //
-    // '29806001:29806001-1c660ae7608cf5b1d2c1ac0799fe64d1;'
-    // '29806002:29806002-d189bd59415ae05e2f678eab8a16b251;'
-    // '29806003:29806003-4de6bb720428891190a1d3cdf9c1c7d2;'
-    //
-    // '29806001:29806001-0e19d727ab9248affe3019d93c476131;'
-    // '29806002:29806002-77991fef77ce015acbfb16f9f0ed815f;'
-    // '29806003:29806003-212e11f912a9b1ace658041d84599a97;'
 
     let info = {
       name: swdjxx.NSRMC,
