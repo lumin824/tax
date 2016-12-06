@@ -4,7 +4,10 @@ import Base from './base.js';
 import moment from 'moment';
 
 export default class extends Base {
-  indexAction(){
+  async indexAction(){
+
+    let { content } = await this.model('article').where({code:'home'}).find();
+    this.assign({content});
     return this.display();
   }
 

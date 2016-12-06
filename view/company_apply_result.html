@@ -1,403 +1,393 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{item.name}}</title>
+{% extends "index_base.html" %}
 
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-  </head>
-  <body>
-    <div class="container">
-      <h2>{{resultJson.info.name}}</h2>
-      <div class="row">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            国赋资信
-          </div>
+{% block content %}
+<h2>{{resultJson.info.name}}</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>T(x)*G(y)</th>
+      <th>2016.11</th>
+      <th>2015.12</th>
+      <th>2014.12</th>
+      <th>2013.12</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td title="=lg实缴税收(千元)">T¥*</td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="实缴税收<br>={{resultJson.taxValue['2016'].tax}}" data-html="true">
+          {{resultJson.taxValue['2016'].ts}}*
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="实缴税收<br>={{resultJson.taxValue['2015'].tax}}" data-html="true">
+          {{resultJson.taxValue['2015'].ts}}*
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="实缴税收<br>={{resultJson.taxValue['2014'].tax}}" data-html="true">
+          {{resultJson.taxValue['2014'].ts}}*
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="实缴税收<br>={{resultJson.taxValue['2013'].tax}}" data-html="true">
+          {{resultJson.taxValue['2013'].ts}}*
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td title="=税收/总资产(assets)(%)">G(a)</td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总资产(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].assets}}" data-html="true">
+          {{resultJson.taxValue['2016'].ga}}a
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总资产(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].assets}}" data-html="true">
+          {{resultJson.taxValue['2015'].ga}}a
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总资产(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].assets}}" data-html="true">
+          {{resultJson.taxValue['2014'].ga}}a
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总资产(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].assets}}" data-html="true">
+          {{resultJson.taxValue['2013'].ga}}a
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td title="=税收/总资本(capital)(%)">G(c)</td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总资本(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].capital}}" data-html="true">
+          {{resultJson.taxValue['2016'].gc}}c
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总资本(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].capital}}" data-html="true">
+          {{resultJson.taxValue['2015'].gc}}c
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总资本(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].capital}}" data-html="true">
+          {{resultJson.taxValue['2014'].gc}}c
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总资本(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].capital}}" data-html="true">
+          {{resultJson.taxValue['2013'].gc}}c
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td title="=税收/总权益(equity)(%)">G(e)</td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总权益(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].equity}}" data-html="true">
+          {{resultJson.taxValue['2016'].ge}}e
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总权益(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].equity}}" data-html="true">
+          {{resultJson.taxValue['2015'].ge}}e
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总权益(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].equity}}" data-html="true">
+          {{resultJson.taxValue['2014'].ge}}e
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总权益(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].equity}}" data-html="true">
+          {{resultJson.taxValue['2013'].ge}}e
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td title="=税收/财务费用(interest)">G(i)</td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/财务费用<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].interest}}" data-html="true">
+          {{resultJson.taxValue['2016'].gi}}i
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/财务费用<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].interest}}" data-html="true">
+          {{resultJson.taxValue['2015'].gi}}i
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/财务费用<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].interest}}" data-html="true">
+          {{resultJson.taxValue['2014'].gi}}i
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/财务费用<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].interest}}" data-html="true">
+          {{resultJson.taxValue['2013'].gi}}i
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td title="=税收/总负债(liability)(%)">G(L)</td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总负债(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].liability}}" data-html="true">
+          {{resultJson.taxValue['2016'].gl}}L
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总负债(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].liability}}" data-html="true">
+          {{resultJson.taxValue['2015'].gl}}L
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总负债(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].liability}}" data-html="true">
+          {{resultJson.taxValue['2014'].gl}}L
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/总负债(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].liability}}" data-html="true">
+          {{resultJson.taxValue['2013'].gl}}L
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td title="=税收/营业收入(revenue)(%)">G(r)</td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/营业收入(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].revenue}}" data-html="true">
+          {{resultJson.taxValue['2016'].gr}}r
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/营业收入(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].revenue}}" data-html="true">
+          {{resultJson.taxValue['2015'].gr}}r
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/营业收入(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].revenue}}" data-html="true">
+          {{resultJson.taxValue['2014'].gr}}r
+        </span>
+      </td>
+      <td>
+        <span data-toggle="tooltip" data-placement="top" title="税收/营业收入(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].revenue}}" data-html="true">
+          {{resultJson.taxValue['2013'].gr}}r
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td title="=税收/市值(value)(%)">G(v)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td title="=-lg退税(千元)">-T*</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+  <tbody>
+</table>
+
+<div class="tab-v2">
+		<ul class="nav nav-tabs">
+				<li class="active"><a href="shortcode_accordion_and_tabs.html#home-1" data-toggle="tab">基础信息</a></li>
+				<li><a href="shortcode_accordion_and_tabs.html#profile-1" data-toggle="tab">税务登记</a></li>
+				<li><a href="shortcode_accordion_and_tabs.html#messages-1" data-toggle="tab">税款明细</a></li>
+				<li><a href="shortcode_accordion_and_tabs.html#settings-1" data-toggle="tab">财务报表</a></li>
+		</ul>
+		<div class="tab-content">
+				<div class="tab-pane fade in active" id="home-1">
+          <table class="table table-bordered table-striped">
+            <tbody>
+              <tr>
+                <th width="150px">工商注册号</th>
+                <td>{{resultJson.info.gszch}}</td>
+              </tr>
+              <tr>
+                <th>法人</th>
+                <td>{{resultJson.info.fr}}</td>
+              </tr>
+              <tr>
+                <th>企业类型</th>
+                <td>{{resultJson.info.qylx}}</td>
+              </tr>
+              <tr>
+                <th>住所</th>
+                <td>{{resultJson.info.zs}}</td>
+              </tr>
+              <tr>
+                <th>成立日期</th>
+                <td>{{resultJson.info.clrq}}</td>
+              </tr>
+            </tbody>
+          </table>
+				</div>
+				<div class="tab-pane fade in" id="profile-1">
+          <table class="table table-bordered table-striped">
+            <tbody>
+              <tr>
+                <th width="150px">纳税人识别号</th>
+                <td>{{resultJson.info.nsrsbh}}</td>
+                <th width="150px">纳税人名称</th>
+                <td>{{resultJson.info.name}}</td>
+              </tr>
+              <tr>
+                <th>组织机构代码</th>
+                <td>{{resultJson.info.zzjgdm}}</td>
+                <th>生产经营期限</th>
+                <td>{{resultJson.info.scjyqx}}</td>
+              </tr>
+              <tr>
+                <th>注册地址</th>
+                <td colspan="3">{{resultJson.info.zcdz}}</td>
+              </tr>
+              <tr>
+                <th>注册地邮政编码</th>
+                <td>{{resultJson.info.zcdyzbm}}</td>
+                <th>注册地联系电话</th>
+                <td>{{resultJson.info.zcdlxdh}}</td>
+              </tr>
+
+              <tr>
+                <th>生产经营地址</th>
+                <td colspan="3">{{resultJson.info.scjydz}}</td>
+              </tr>
+              <tr>
+                <th>生产地邮政编码</th>
+                <td>{{resultJson.info.scdyzbm}}</td>
+                <th>生产地联系电话</th>
+                <td>{{resultJson.info.scdlxdh}}</td>
+              </tr>
+
+              <tr>
+                <th>从业人数</th>
+                <td>{{resultJson.info.cyrs}}</td>
+                <th>外籍人数</th>
+                <td>{{resultJson.info.wjrs}}</td>
+              </tr>
+
+              <tr>
+                <th>经营范围</th>
+                <td colspan="3">{{resultJson.info.jyfw}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>投资方信息</h4>
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th>T(x)*G(y)</th>
-                <th>2016.11</th>
-                <th>2015.12</th>
-                <th>2014.12</th>
-                <th>2013.12</th>
+                <th>投资方名称</th>
+                <th>投资方经济性质</th>
+                <th>投资比例</th>
+                <th>证件种类</th>
+                <th>证件号码</th>
+                <th>国籍或地址</th>
               </tr>
             </thead>
             <tbody>
+              {% for o in resultJson.info.tzfxx %}
               <tr>
-                <td title="=lg实缴税收(千元)">T¥*</td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="实缴税收<br>={{resultJson.taxValue['2016'].tax}}" data-html="true">
-                    {{resultJson.taxValue['2016'].ts}}*
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="实缴税收<br>={{resultJson.taxValue['2015'].tax}}" data-html="true">
-                    {{resultJson.taxValue['2015'].ts}}*
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="实缴税收<br>={{resultJson.taxValue['2014'].tax}}" data-html="true">
-                    {{resultJson.taxValue['2014'].ts}}*
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="实缴税收<br>={{resultJson.taxValue['2013'].tax}}" data-html="true">
-                    {{resultJson.taxValue['2013'].ts}}*
-                  </span>
-                </td>
+                <th>{{o.tzfmc}}</th>
+                <td>{{o.jjxz}}</td>
+                <th>{{o.tzbl}}</th>
+                <th>{{o.zjzl}}</th>
+                <td>{{o.zjhm}}</td>
+                <th>{{o.gjdz}}</th>
               </tr>
-              <tr>
-                <td title="=税收/总资产(assets)(%)">G(a)</td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总资产(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].assets}}" data-html="true">
-                    {{resultJson.taxValue['2016'].ga}}a
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总资产(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].assets}}" data-html="true">
-                    {{resultJson.taxValue['2015'].ga}}a
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总资产(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].assets}}" data-html="true">
-                    {{resultJson.taxValue['2014'].ga}}a
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总资产(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].assets}}" data-html="true">
-                    {{resultJson.taxValue['2013'].ga}}a
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td title="=税收/总资本(capital)(%)">G(c)</td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总资本(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].capital}}" data-html="true">
-                    {{resultJson.taxValue['2016'].gc}}c
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总资本(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].capital}}" data-html="true">
-                    {{resultJson.taxValue['2015'].gc}}c
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总资本(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].capital}}" data-html="true">
-                    {{resultJson.taxValue['2014'].gc}}c
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总资本(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].capital}}" data-html="true">
-                    {{resultJson.taxValue['2013'].gc}}c
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td title="=税收/总权益(equity)(%)">G(e)</td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总权益(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].equity}}" data-html="true">
-                    {{resultJson.taxValue['2016'].ge}}e
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总权益(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].equity}}" data-html="true">
-                    {{resultJson.taxValue['2015'].ge}}e
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总权益(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].equity}}" data-html="true">
-                    {{resultJson.taxValue['2014'].ge}}e
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总权益(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].equity}}" data-html="true">
-                    {{resultJson.taxValue['2013'].ge}}e
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td title="=税收/财务费用(interest)">G(i)</td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/财务费用<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].interest}}" data-html="true">
-                    {{resultJson.taxValue['2016'].gi}}i
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/财务费用<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].interest}}" data-html="true">
-                    {{resultJson.taxValue['2015'].gi}}i
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/财务费用<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].interest}}" data-html="true">
-                    {{resultJson.taxValue['2014'].gi}}i
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/财务费用<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].interest}}" data-html="true">
-                    {{resultJson.taxValue['2013'].gi}}i
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td title="=税收/总负债(liability)(%)">G(L)</td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总负债(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].liability}}" data-html="true">
-                    {{resultJson.taxValue['2016'].gl}}L
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总负债(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].liability}}" data-html="true">
-                    {{resultJson.taxValue['2015'].gl}}L
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总负债(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].liability}}" data-html="true">
-                    {{resultJson.taxValue['2014'].gl}}L
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/总负债(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].liability}}" data-html="true">
-                    {{resultJson.taxValue['2013'].gl}}L
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td title="=税收/营业收入(revenue)(%)">G(r)</td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/营业收入(%)<br>={{resultJson.taxValue['2016'].tax}}/{{resultJson.taxValue['2016'].revenue}}" data-html="true">
-                    {{resultJson.taxValue['2016'].gr}}r
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/营业收入(%)<br>={{resultJson.taxValue['2015'].tax}}/{{resultJson.taxValue['2015'].revenue}}" data-html="true">
-                    {{resultJson.taxValue['2015'].gr}}r
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/营业收入(%)<br>={{resultJson.taxValue['2014'].tax}}/{{resultJson.taxValue['2014'].revenue}}" data-html="true">
-                    {{resultJson.taxValue['2014'].gr}}r
-                  </span>
-                </td>
-                <td>
-                  <span data-toggle="tooltip" data-placement="top" title="税收/营业收入(%)<br>={{resultJson.taxValue['2013'].tax}}/{{resultJson.taxValue['2013'].revenue}}" data-html="true">
-                    {{resultJson.taxValue['2013'].gr}}r
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td title="=税收/市值(value)(%)">G(v)</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td title="=-lg退税(千元)">-T*</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
-              </tr>
-            <tbody>
+              {% endfor %}
+            </tbody>
           </table>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-12">
-          <ul class="nav nav-tabs" role="tablist" id="myTab">
-            <li role="presentation" class="active"><a href="#tabpanel-base" role="tab" data-toggle="tab">基础信息</a></li>
-            <li role="presentation"><a href="#tabpanel-tax-info" role="tab" data-toggle="tab">税务登记</a></li>
-            <li role="presentation"><a href="#tabpanel-tax-money" role="tab" data-toggle="tab">税款明细</a></li>
-            <li role="presentation"><a href="#tabpanel-tax-report" role="tab" data-toggle="tab">财务报表</a></li>
-          </ul>
-
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="tabpanel-base">
-              <br>
-              <table class="table table-bordered table-striped">
-                <tbody>
-                  <tr>
-                    <th width="150px">工商注册号</th>
-                    <td>{{resultJson.info.gszch}}</td>
-                  </tr>
-                  <tr>
-                    <th>法人</th>
-                    <td>{{resultJson.info.fr}}</td>
-                  </tr>
-                  <tr>
-                    <th>企业类型</th>
-                    <td>{{resultJson.info.qylx}}</td>
-                  </tr>
-                  <tr>
-                    <th>住所</th>
-                    <td>{{resultJson.info.zs}}</td>
-                  </tr>
-                  <tr>
-                    <th>成立日期</th>
-                    <td>{{resultJson.info.clrq}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="tabpanel-tax-info">
-              <br>
-              <table class="table table-bordered table-striped">
-                <tbody>
-                  <tr>
-                    <th width="150px">纳税人识别号</th>
-                    <td>{{resultJson.info.nsrsbh}}</td>
-                    <th width="150px">纳税人名称</th>
-                    <td>{{resultJson.info.name}}</td>
-                  </tr>
-                  <tr>
-                    <th>组织机构代码</th>
-                    <td>{{resultJson.info.zzjgdm}}</td>
-                    <th>生产经营期限</th>
-                    <td>{{resultJson.info.scjyqx}}</td>
-                  </tr>
-                  <tr>
-                    <th>注册地址</th>
-                    <td colspan="3">{{resultJson.info.zcdz}}</td>
-                  </tr>
-                  <tr>
-                    <th>注册地邮政编码</th>
-                    <td>{{resultJson.info.zcdyzbm}}</td>
-                    <th>注册地联系电话</th>
-                    <td>{{resultJson.info.zcdlxdh}}</td>
-                  </tr>
-
-                  <tr>
-                    <th>生产经营地址</th>
-                    <td colspan="3">{{resultJson.info.scjydz}}</td>
-                  </tr>
-                  <tr>
-                    <th>生产地邮政编码</th>
-                    <td>{{resultJson.info.scdyzbm}}</td>
-                    <th>生产地联系电话</th>
-                    <td>{{resultJson.info.scdlxdh}}</td>
-                  </tr>
-
-                  <tr>
-                    <th>从业人数</th>
-                    <td>{{resultJson.info.cyrs}}</td>
-                    <th>外籍人数</th>
-                    <td>{{resultJson.info.wjrs}}</td>
-                  </tr>
-
-                  <tr>
-                    <th>经营范围</th>
-                    <td colspan="3">{{resultJson.info.jyfw}}</td>
-                  </tr>
-                </tbody>
-              </table>
-
-              <h4>投资方信息</h4>
-              <table class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>投资方名称</th>
-                    <th>投资方经济性质</th>
-                    <th>投资比例</th>
-                    <th>证件种类</th>
-                    <th>证件号码</th>
-                    <th>国籍或地址</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for o in resultJson.info.tzfxx %}
-                  <tr>
-                    <th>{{o.tzfmc}}</th>
-                    <td>{{o.jjxz}}</td>
-                    <th>{{o.tzbl}}</th>
-                    <th>{{o.zjzl}}</th>
-                    <td>{{o.zjhm}}</td>
-                    <th>{{o.gjdz}}</th>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="tabpanel-tax-money">
-              <br>
-              <table class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>名称</th>
-                    <th>金额</th>
-                    <th>时间</th>
-                    <th>备注</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for o in resultJson.taxList %}
-                  <tr>
-                    <td>{{o.name}}</td>
-                    <td>{{o.money}}</td>
-                    <td>{{o.time}}</td>
-                    <td>{{o.remark}}</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="tabpanel-tax-report">
-              <br>
-              <table class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>名称</th>
-                    <th>时间</th>
-                    <th>来源</th>
-                    <th>操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for o in resultJson.cwbbList %}
-                  <tr>
-                    <td>{{o.name}}</td>
-                    <td>{{o.time}}</td>
-                    <td>{{o.remark}}</td>
-                    <td>
-                      {% for p in o.archiveList %}
-                      <a href="/archive/view?hash={{p.hash}}&type={{p.type}}" target="_blank">{{p.name}}</a>
-                      {% endfor %}
-
-                    </td>
-                  </tr>
+				</div>
+				<div class="tab-pane fade in" id="messages-1">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>金额</th>
+                <th>时间</th>
+                <th>备注</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in resultJson.taxList %}
+              <tr>
+                <td>{{o.name}}</td>
+                <td>{{o.money}}</td>
+                <td>{{o.time}}</td>
+                <td>{{o.remark}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+				</div>
+				<div class="tab-pane fade in" id="settings-1">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>时间</th>
+                <th>来源</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in resultJson.cwbbList %}
+              <tr>
+                <td>{{o.name}}</td>
+                <td>{{o.time}}</td>
+                <td>{{o.remark}}</td>
+                <td>
+                  {% for p in o.archiveList %}
+                  <a href="/archive/view?hash={{p.hash}}&type={{p.type}}" target="_blank">{{p.name}}</a>
                   {% endfor %}
 
-                </tbody>
-              </table>
-            </div>
-          </div>
+                </td>
+              </tr>
+              {% endfor %}
 
-        </div>
-      </div>
+            </tbody>
+          </table>
+				</div>
+		</div>
+</div>
 
-      <div class="row">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            result
-          </div>
-          <div class="panel-body">
-            {{item.result}}
-          </div>
-        </div>
-      </div>
-    </div>
+{% endblock %}
 
-    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script>
-      $(function(){
-        $('[data-toggle=tooltip]').tooltip()
-      });
-    </script>
-  </body>
-</html>
+{% block script %}
+<script>
+  $(function(){
+    $('[data-toggle=tooltip]').tooltip();
+    var current_time = parseInt('{{item.update_time}}');
+    var timeoutQueryLast = function(millisec){
+      setTimeout(function(){
+        $.ajax({
+          url:'/company/apply_last_time',
+          data:{id:'{{item.id}}'},
+          success: function(resp){
+            if(resp.errno == 0){
+              var data = resp.data;
+              if(data.update_time > current_time){
+                if(confirm('审核状态已更新,点击确定重新加载页面')){
+                  document.location.reload();
+                }
+              }else{
+                timeoutQueryLast(10000);
+              }
+            }else{
+              alert(resp.errmsg);
+            }
+
+          }
+        })
+      }, millisec);
+
+    }
+
+    timeoutQueryLast(10000);
+  });
+</script>
+{% endblock %}

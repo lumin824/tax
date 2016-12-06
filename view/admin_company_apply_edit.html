@@ -1,0 +1,257 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>信息复核</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/admin">首页</a>
+            </li>
+            <li>
+                <a href="/admin/company_list">申请核查列表</a>
+            </li>
+            <li class="active">
+                <strong>信息复核</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>申请信息</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <h2 >
+                        {{item.name}}<br/>
+                    </h2>
+                    <p>社会信用代码：{{item.uscc}}</p>
+                    <p>国税代码：{{item.gs_username}}</p>
+                    <p>地税代码：{{item.ds_username}}</p>
+                    <p>国税密码：{{item.gs_password}}</p>
+                    <p>地税密码：{{item.ds_password}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <form name="taxListForm" class="ibox float-e-margins" method="post" action="/admin/company_apply_edit">
+              <input type="hidden" name="id" value="{{item.id}}" />
+              <input type="hidden" name="oper" value="edit_taxList" />
+                <div class="ibox-title">
+                    <h5>财务数据</h5>
+                    <div class="ibox-tools">
+                        <button type="submit" class="btn btn-xs btn-primary">确认保存</button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            {% for o in taxValueKey %}
+                            <th>{{o}}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>税款</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_tax" value="{{taxValue[o].tax}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>资产</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_assets" value="{{taxValue[o].assets}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>实收资本或股本</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_capital" value="{{taxValue[o].capital}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>所有者权益</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_equity" value="{{taxValue[o].equity}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>负债</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_liability" value="{{taxValue[o].liability}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>业务收入</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_revenue" value="{{taxValue[o].revenue}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>财务费用</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_interest" value="{{taxValue[o].interest}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>发票情况</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_fapiao" value="{{taxValue[o].fapiao}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>特别调整</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_remark" value="{{taxValue[o].remark}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>相关说明</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_other" value="{{taxValue[o].other}}"></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>综合评价</td>
+                            {% for o in taxValueKey %}
+                            <td><input name="{{o}}_pingjia" value="{{taxValue[o].pingjia}}"></td>
+                            {% endfor %}
+                          </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#tab-1">基础信息</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-2">税务登记</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-3">税款明细</a></li>
+                            <li class=""><a data-toggle="tab" href="#tab-4">财务报表</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane active">
+                                <div class="panel-body">
+                                    <strong>Lorem ipsum dolor sit amet, consectetuer adipiscing</strong>
+
+                                    <p>A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of
+                                        existence in this spot, which was created for the bliss of souls like mine.</p>
+
+                                    <p>I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at
+                                        the present moment; and yet I feel that I never was a greater artist than now. When.</p>
+                                </div>
+                            </div>
+                            <div id="tab-2" class="tab-pane">
+                                <div class="panel-body">
+                                    <strong>Donec quam felis</strong>
+
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
+                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+                                </div>
+                            </div>
+                            <div id="tab-3" class="tab-pane">
+                                <div class="panel-body">
+                                    <strong>Donec quam felis</strong>
+
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
+                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+                                </div>
+                            </div>
+                            <div id="tab-4" class="tab-pane">
+                                <div class="panel-body">
+                                    <strong>Donec quam felis</strong>
+
+                                    <p>Thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects
+                                        and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath </p>
+
+                                    <p>I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite
+                                        sense of mere tranquil existence, that I neglect my talents. I should be incapable of drawing a single stroke at the present moment; and yet.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>财务数据</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    {{item.result}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<!-- Jquery Validate -->
+<script src="/static/in/js/plugins/validate/jquery.validate.min.js"></script>
+<script>
+  $(function(){
+    $('form').validate({
+      submitHandler: function(form) {
+        var $form = $(form);
+        var data = _.reduce($form.serializeArray(), function(result, o) {
+          result[o.name] = o.value;
+          return result;
+        }, {});
+
+        var url = $form.attr('action');
+        var type = $form.attr('method')
+        $.ajax({
+          url: url,
+          type: type,
+          data: data,
+          success: function(resp) {
+            if (resp.errno == 0) {
+              alert('操作成功')
+              if (resp.data.reload) document.location.reload();
+              if (resp.redirect) window.location.href = resp.redirect;
+            } else {
+              alert(resp.errmsg);
+            }
+          }
+        });
+
+        return false;
+      }
+    });
+  })
+</script>
+{% endblock %}

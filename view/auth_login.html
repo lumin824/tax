@@ -1,65 +1,95 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
+<html>
+
+<head>
+
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+    <title>INSPINIA | Login 2</title>
 
-    <!--[if lt IE 9]>
-      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="container">
+    <link href="/static/in/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/in/font-awesome/css/font-awesome.css" rel="stylesheet">
 
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              登陆
+    <link href="/static/in/css/animate.css" rel="stylesheet">
+    <link href="/static/in/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="loginColumns animated fadeInDown">
+        <div class="row">
+
+            <div class="col-md-6">
+                <h2 class="font-bold">Welcome to IN+</h2>
+
+                <p>
+                    Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.
+                </p>
+
+                <p>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                </p>
+
+                <p>
+                    When an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                </p>
+
+                <p>
+                    <small>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</small>
+                </p>
+
             </div>
-            <div class="panel-body">
-              <form class="form-horizontal" role="form" action="/auth/login" method="post">
-                <div class="form-group">
-                  <label class="col-sm-2 control-label" for="username">用户名</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名或手机号">
-                  </div>
+            <div class="col-md-6">
+                <div class="ibox-content">
+                    <form action="/auth/login" method="post" class="m-t" role="form">
+                        <input type="hidden" name="ret" value="{{http.query.ret}}" >
+                        <div class="form-group">
+                            <input name="account" type="text" class="form-control" placeholder="请输入用户名/手机号/电子邮箱" required="">
+                        </div>
+                        <div class="form-group">
+                            <input name="password" type="password" class="form-control" placeholder="请输入密码" required="">
+                        </div>
+                        <button type="submit" class="btn btn-primary block full-width m-b">登陆</button>
+
+                        <a href="#">
+                            <small>Forgot password?</small>
+                        </a>
+
+                        <p class="text-muted text-center">
+                            <small>Do not have an account?</small>
+                        </p>
+                        <a class="btn btn-sm btn-white btn-block" href="register.html">Create an account</a>
+                    </form>
+                    <p class="m-t">
+                        <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small>
+                    </p>
                 </div>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label" for="password">密码</label>
-                  <div class="col-sm-10">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">登陆</button>
-                  </div>
-                </div>
-              </form>
             </div>
-          </div>
         </div>
-
-      </div>
-
+        <hr/>
+        <div class="row">
+            <div class="col-md-6">
+                Copyright Example Company
+            </div>
+            <div class="col-md-6 text-right">
+               <small>© 2014-2015</small>
+            </div>
+        </div>
     </div>
 
-    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="http://cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js"></script>
-    <script src="http://cdn.bootcss.com/lodash.js/4.17.0/lodash.min.js"></script>
+    <!-- Mainly scripts -->
+    <script src="/static/in/js/jquery-2.1.1.js"></script>
+    <script src="/static/in/js/bootstrap.min.js"></script>
+
+    <script src="/static/in/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="/static/js/lodash.min.js"></script>
     <script>
       $(function(){
         $('form').validate({
           messages: {
-          username: {
+            account: {
               required: '请输入用户名'
             },
             password: {
@@ -80,8 +110,9 @@
               type: type,
               data: data,
               success: function(resp) {
-                if (resp.errno == 200) {
-                  if (resp.redirect) window.location.href = resp.redirect;
+                if (resp.errno == 0) {
+                  var data = resp.data;
+                  if (data.redirect) window.location.href = data.redirect;
                 } else {
                   alert(resp.errmsg);
                 }
@@ -91,5 +122,6 @@
         });
       });
     </script>
-  </body>
+</body>
+
 </html>

@@ -2,19 +2,30 @@
 {% set plugin_jqgrid = true %}
 
 {% block content %}
-<div class="row">
-    <div class="col-sm-12">
-        <div class="ibox ">
-            <div class="ibox-title">
-                <h5>用户</h5>
-                <div class="ibox-tools">
-                    <a class="btn btn-primary btn-xs" href="/admin/user_edit" >创建用户</a>
-                </div>
-            </div>
-            <div class="ibox-content">
-                <div class="jqGrid_wrapper">
-                    <table id="jqGrid_table"></table>
-                    <div id="jqGrid_pager"></div>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>用户列表</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/admin">首页</a>
+            </li>
+            <li class="active">
+                <strong>用户列表</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-content">
+                    <div class="jqGrid_wrapper">
+                        <table id="jqgrid-table"></table>
+                        <div id="jqgrid-pager"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -23,78 +34,62 @@
 {% endblock %}
 
 {% block script %}
+
+<!-- jqGrid -->
+<script src="/static/in/js/plugins/jqGrid/i18n/grid.locale-cn.js"></script>
+<script src="/static/in/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
+
 <script>
-    $(function () {
-        $.jgrid.defaults.styleUI = 'Bootstrap';
-        $("#jqGrid_table").jqGrid({
+    $(document).ready(function () {
+        $("#jqgrid-table").jqGrid({
             url:'/admin/user',
             editurl:'/admin/user_edit',
-            colNames: ['序号', '用户名', '手机号', '创建时间', '操作'],
-            colModel: [
-                {
-                    name: 'id',
-                    editable: false,
-                    width: 60,
-                    search: true
-                },
-                {
-                    name: 'username',
-                    editable: true,
-                    width: 90
-                },
-                {
-                    name: 'mobile',
-                    editable: false,
-                    width: 80
-                },
-                {
-                    name: 'create_time',
-                    editable: false,
-                    width: 80,
-                    formatter:'date',
-                    formatoptions: { srcformat:'u', newformat:'Y-m-d H:i:s'}
-                },
-                {
-                    name: 'id',
-                    width: 100,
-                    sortable: false,
-                    formatter: function(cell, opt, row){
-                      return ''
-                      + ' <a class="btn btn-primary btn-xs" href="/admin/user_edit?id='+cell+'" >编辑</a>';
-                    }
-                }
-            ],
+            mtype:'post',
             datatype: 'json',
-            height: 450,
             autowidth: true,
-            shrinkToFit: true,
             rowNum: 20,
             rowList: [10, 20, 30],
-            pager: "#jqGrid_pager",
+            colNames:['#','用户名', '手机号', '电子邮箱', '创建时间','操作'],
+            colModel:[
+                {name:'id', width:50, sortable:false},
+                {name:'username', width:150},
+                {name:'mobile', width:150},
+                {name:'email', width:120},
+                {name:'create_time', width:120, formatter:'date', formatoptions: { srcformat:'u', newformat:'Y-m-d H:i:s'}},
+                {name:'id', width: 100, sortable: false, formatter: function(cell, opt, row){
+                  return ''
+                  + ' <a class="btn btn-primary btn-outline btn-xs" href="/admin/user_edit?id='+cell+'" >编辑</a>';
+                }}
+            ],
+            pager: "#jqgrid-pager",
             viewrecords: true,
-            add: true,
-            edit: true,
-            addtext: 'Add',
-            edittext: 'Edit',
-            hidegrid: false,
-            multiselect: true,
+            multiselect: true
         });
 
+
         // Setup buttons
-        $("#jqGrid_table").jqGrid('navGrid', '#jqGrid_pager', {
-            edit: false,
-            add: false,
-            del: true,
-            search: true
-        }, {
-            reloadAfterSubmit: true
-        });
+        $("#jqgrid-table").jqGrid('navGrid', '#jqgrid-pager',
+            {edit: false, add: false, del: true, search: true},
+            {height: 200, reloadAfterSubmit: true}
+        );
 
         // Add responsive to jqGrid
         $(window).bind('resize', function () {
             var width = $('.jqGrid_wrapper').width();
-            $('#jqGrid_table').setGridWidth(width);
+            $('#jqgrid-table').setGridWidth(width);
         });
+
+
+        setTimeout(function(){
+            $('.wrapper-content').removeClass('animated fadeInRight');
+        },700);
+
     });
+
 </script>
+{% endblock %}
+
+{% block css %}
+<link href="/static/in/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+<link href="/static/in/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
 {% endblock %}

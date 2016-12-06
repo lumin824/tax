@@ -1,6 +1,25 @@
 {% extends "admin_base.html" %}
 
 {% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>用户信息编辑</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/admin">首页</a>
+            </li>
+            <li>
+                <a href="/admin/user">用户列表</a>
+            </li>
+            <li class="active">
+                <strong>用户信息编辑</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content  animated fadeInRight">
 <div class="row">
     <div class="col-sm-12">
         <form class="ibox float-e-margins" method="post" action="/admin/user_edit">
@@ -39,6 +58,7 @@
         </form>
     </div>
 </div>
+</div>
 {% endblock %}
 
 {% block script %}
@@ -74,8 +94,9 @@
               data: data,
               success: function(resp){
                 if(resp.errno == 0){
-                  alert('操作成功')
-                  if(resp.data.redirect) window.location.href = resp.data.redirect;
+                  alert('操作成功');
+                  var data = resp.data;
+                  if(data.redirect) window.location.href = data.redirect;
                   else history.go(-1);
                 }else{
                   alert(resp.errmsg);

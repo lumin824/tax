@@ -1,0 +1,124 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>文章信息编辑</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="/admin">首页</a>
+            </li>
+            <li>
+                <a href="/admin/article">文章列表</a>
+            </li>
+            <li class="active">
+                <strong>文章信息编辑</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content  animated fadeInRight">
+<div class="row">
+    <div class="col-sm-12">
+        <form class="ibox float-e-margins" method="post" action="/admin/article_edit">
+            <div class="ibox-title">
+                <h5>文章信息</h5>
+                <div class="ibox-tools">
+                    <button class="btn btn-primary btn-xs" type="submit">{{'保存' if item.id else '添加'}}</button>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="form-horizontal">
+                    <input type="hidden" name="id" value="{{item.id}}">
+                    <input type="hidden" name="oper" value="{{'edit' if item and item.id else 'add'}}">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">文章名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="name" value="{{item.name}}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">文章代码</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="code" value="{{item.code}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-10">
+                          <div class="summernote">
+                            {{item.content | safe }}
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<!-- jQuery Validation plugin javascript-->
+<script src="/static/in/js/plugins/validate/jquery.validate.min.js"></script>
+
+<!-- SUMMERNOTE -->
+<script src="/static/in/js/plugins/summernote/summernote.min.js"></script>
+
+<script>
+    $(function(){
+        var $summernote = $('.summernote').summernote({
+          height:450
+        });
+
+        $('form').validate({
+          messages: {
+            username:{
+              required:'请输入用户名'
+            },
+            password:{
+              required:'请输入密码'
+            }
+          },
+          submitHandler:function(form){
+            var $form = $(form);
+
+            var data = _.reduce($form.serializeArray(), function(result, o){
+              var val = result[o.name];
+              val = val ? (val + ',' + o.value) : o.value;
+              result[o.name] = val;
+              return result;
+            }, {});
+            data.content = $summernote.summernote('code');
+            var url = $form.attr('action');
+            var type = $form.attr('method')
+            $.ajax({
+              url: url,
+              type: type,
+              data: data,
+              success: function(resp){
+                if(resp.errno == 0){
+                  alert('操作成功');
+                  var data = resp.data;
+                  if(data.redirect) window.location.href = data.redirect;
+                  else history.go(-1);
+                }else{
+                  alert(resp.errmsg);
+                }
+              }
+            });
+          }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block css %}
+<link href="/static/in/css/plugins/summernote/summernote.css" rel="stylesheet">
+<link href="/static/in/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+
+{% endblock %}

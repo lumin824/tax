@@ -1,72 +1,76 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>公司详情 - 国赋资信</title>
+{% extends "index_base.html" %}
 
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
-  </head>
-  <body>
+{% block content %}
+
+<!--=== Search Block Version 2 ===-->
+<div class="search-block">
     <div class="container">
-      <div class="row">
-        <form role="form" class="form-inline" action="/cc" method="get">
-          <div class="form-group">
-            <input type="text" name="keyword" class="form-control" value="{{http.query.keyword}}" placeholder="请输入企业或个人信息">
-          </div>
-          <label class="radio-inline">
-            <input type="radio" name="templateId" value="" {{'checked' if not http.query.templateId}}> 全部
-          </label>
-          <label class="radio-inline">
-            <input type="radio" name="templateId" value="1,6,7" {{'checked' if http.query.templateId=='1,6,7'}}> 失信
-          </label>
-          <button type="submit" class="btn btn-default">搜索</button>
-        </form>
-      </div>
+        <div class="col-md-6 col-md-offset-3">
+            <form class="sky-form" style="border:none;" action="/cc" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="keyword" value="{{http.query.keyword}}" placeholder="请输入企业或个人信息">
 
-      {% if result.length %}
-      <div class="row">
-        <table class="table table-condensed">
-          <thead>
-            <tr>
-              <th>主体类型</th>
-              <th>组织机构/身份证号</th>
-              <th>纪录类型</th>
-              <th>归属地址</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for o in result %}
-            <tr>
-              <td>
-                <a href="/cc/detail?objectType={{o.objectType}}&encryStr={{o.encryStr}}" target="_blank">{{o.name}}</a>
-              </td>
-              <td>{{o.idCardOrOrgCode}}</td>
-              <td>
-                <span class="label label-info">{{o.goodCount}}</span>
-                <span class="label label-warning">{{o.badCount}}</span>
-                <span class="label label-danger">{{o.dishonestyCount}}</span>
-              </td>
-              <td>{{o.area}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      {% endif %}
+                    <span class="input-group-btn">
+                        <button class="btn-u" type="submit"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
 
-
+                <div class="inline-group">
+                    <label class="radio">
+                      <input type="radio" name="templateId" value="" {{'checked' if not http.query.templateId}}>
+                      <i class="rounded-x"></i> 全部
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="templateId" value="1,6,7" {{'checked' if http.query.templateId=='1,6,7'}}>
+                      <i class="rounded-x"></i>失信
+                    </label>
+                </div>
+            </form>
+        </div>
     </div>
+</div><!--/container-->
+<!--=== End Search Block Version 2 ===-->
 
-    <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="//cdn.bootcss.com/jquery-validate/1.13.0/jquery.validate.min.js"></script>
-    <script src="//cdn.bootcss.com/lodash.js/4.16.4/lodash.min.js"></script>
-    <script>
-      $(function(){
-      });
-    </script>
-  </body>
-</html>
+<div class="container content-sm">
+    <!-- Begin Table Search v1 -->
+    <div class="table-search-v1 margin-bottom-30">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>主体类型</th>
+                    <th>组织机构/身份证号</th>
+                    <th>纪录类型</th>
+                    <th>归属地址</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for o in result %}
+                  <tr>
+                    <td>
+                      <a href="/cc/detail?objectType={{o.objectType}}&encryStr={{o.encryStr}}" target="_blank">{{o.name}}</a>
+                    </td>
+                    <td>{{o.idCardOrOrgCode}}</td>
+                    <td>
+                      <span class="label label-info">{{o.goodCount}}</span>
+                      <span class="label label-warning">{{o.badCount}}</span>
+                      <span class="label label-danger">{{o.dishonestyCount}}</span>
+                    </td>
+                    <td>{{o.area}}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- End Table Search v1 -->
+
+</div>
+
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/in/plugins/sky-forms-pro/skyforms/css/sky-forms.css">
+<link rel="stylesheet" href="/static/in/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css">
+<!--[if lt IE 9]><link rel="stylesheet" href="assets/plugins/sky-forms-pro/skyforms/css/sky-forms-ie8.css"><![endif]-->
+{% endblock %}

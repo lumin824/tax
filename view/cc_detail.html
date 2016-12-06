@@ -1,3 +1,111 @@
+{% extends "index_base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      基础信息
+      <a href="/" class="btn btn-success" style="margin-left:10px;">国赋资信</a>
+      <a href="javascript:;" data-toggle="collapse" data-target="#sxdj" aria-expanded="false" aria-controls="sxdj" class="btn btn-default" style="margin-left:10px;background:#fff;">
+        失信等级
+        {% if sxdj %}
+        T {{sxdj}} *
+        {% endif %}
+      </a>
+    </div>
+    <div class="panel-body">
+      {% for o in result.infos[0][0] %}
+      {{o}}<br>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div id="sxdj" class="row collapse">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div >
+        涉案金额总计：{{sxje}}元<br><br>
+        {% for o in fmjl %}
+        {{o.frxm}}<br>
+        {{o.wfss}}<br>
+        {{o.cfqk}}<br>
+        涉案金额：{{o.je}}元<br>
+        <hr>
+        {% endfor %}
+        {% for o in schmd %}
+        {{o.ah}}{% if o.ah %}<br>{% endif %}
+        {{o.frxm}}{% if o.frxm %}<br>{% endif %}
+        {{o.qdyw}}{% if o.qdyw %}<br>{% endif %}
+        {{o.blxw}}{% if o.blxw %}<br>{% endif %}
+        {{o.cfjg}}{% if o.cfjg %}<br>{% endif %}
+        涉案金额：{{o.je}}元<br>
+        <hr>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a href="javascript:;" data-toggle="collapse" data-target="#yljl" aria-expanded="false" aria-controls="yljl">优良记录</a>
+    </div>
+    <div id="yljl" class="panel-body collapse">
+      {% for o in result.infos[1] %}
+      {% for p in o %}
+      {{p}}<br>
+      {% endfor %}
+      <hr>
+      {% else %}
+      平台未收录该企业的优良记录。
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a href="javascript:;" data-toggle="collapse" data-target="#fmjl" aria-expanded="false" aria-controls="fmjl">负面记录</a>
+    </div>
+    <div id="fmjl" class="panel-body collapse">
+      {% for o in result.infos[2] %}
+      {% for p in o %}
+      {{p}}<br>
+      {% endfor %}
+      <hr>
+      {% else %}
+      平台未收录该企业的负面记录。
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a href="javascript:;" data-toggle="collapse" data-target="#schmd" aria-expanded="false" aria-controls="schmd">受惩黑名单</a>
+    </div>
+    <div id="schmd" class="panel-body collapse">
+      {% for o in result.infos[3] %}
+      {% for p in o %}
+      {{p}}<br>
+      {% endfor %}
+      <hr>
+      {% else %}
+      平台未收录该企业的受惩黑名单。
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
+
+
+{% endblock %}
+
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
@@ -11,106 +119,9 @@
   </head>
   <body>
     <div class="container">
-      <div class="row">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            基础信息
-            <a href="/" class="btn btn-success" style="margin-left:10px;">国赋资信</a>
-            <a href="javascript:;" data-toggle="collapse" data-target="#sxdj" aria-expanded="false" aria-controls="sxdj" class="btn btn-default" style="margin-left:10px;background:#fff;">
-              失信等级
-              {% if sxdj %}
-              T {{sxdj}} *
-              {% endif %}
-            </a>
-          </div>
-          <div class="panel-body">
-            {% for o in result.infos[0][0] %}
-            {{o}}<br>
-            {% endfor %}
-          </div>
-        </div>
-      </div>
 
-      <div id="sxdj" class="row collapse">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <div >
-              涉案金额总计：{{sxje}}元<br><br>
-              {% for o in fmjl %}
-              {{o.frxm}}<br>
-              {{o.wfss}}<br>
-              {{o.cfqk}}<br>
-              涉案金额：{{o.je}}元<br>
-              <hr>
-              {% endfor %}
-              {% for o in schmd %}
-              {{o.ah}}{% if o.ah %}<br>{% endif %}
-              {{o.frxm}}{% if o.frxm %}<br>{% endif %}
-              {{o.qdyw}}{% if o.qdyw %}<br>{% endif %}
-              {{o.blxw}}{% if o.blxw %}<br>{% endif %}
-              {{o.cfjg}}{% if o.cfjg %}<br>{% endif %}
-              涉案金额：{{o.je}}元<br>
-              <hr>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <a href="javascript:;" data-toggle="collapse" data-target="#yljl" aria-expanded="false" aria-controls="yljl">优良记录</a>
-          </div>
-          <div id="yljl" class="panel-body collapse">
-            {% for o in result.infos[1] %}
-            {% for p in o %}
-            {{p}}<br>
-            {% endfor %}
-            <hr>
-            {% else %}
-            平台未收录该企业的优良记录。
-            {% endfor %}
-          </div>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <a href="javascript:;" data-toggle="collapse" data-target="#fmjl" aria-expanded="false" aria-controls="fmjl">负面记录</a>
-          </div>
-          <div id="fmjl" class="panel-body collapse">
-            {% for o in result.infos[2] %}
-            {% for p in o %}
-            {{p}}<br>
-            {% endfor %}
-            <hr>
-            {% else %}
-            平台未收录该企业的负面记录。
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <a href="javascript:;" data-toggle="collapse" data-target="#schmd" aria-expanded="false" aria-controls="schmd">受惩黑名单</a>
-          </div>
-          <div id="schmd" class="panel-body collapse">
-            {% for o in result.infos[3] %}
-            {% for p in o %}
-            {{p}}<br>
-            {% endfor %}
-            <hr>
-            {% else %}
-            平台未收录该企业的受惩黑名单。
-            {% endfor %}
-          </div>
-        </div>
-      </div>
-    </div>
 
     <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
