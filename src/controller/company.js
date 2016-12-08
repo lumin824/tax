@@ -92,7 +92,9 @@ export default class extends Base {
     };
 
     result = JSON.stringify(result);
-    this.model('company_apply').where({id}).update({result,review_status:'1'});
+    this.model('company_apply').where({id}).update({
+      name: info.name,
+      result,review_status:'1'});
   }
 
   async _process_cc(cc_api, id, name, uscc, gs_username, ds_username){
@@ -109,7 +111,9 @@ export default class extends Base {
     };
 
     result = JSON.stringify(result);
-    this.model('company_apply').where({id}).update({result,review_status:'1'});
+    this.model('company_apply').where({id}).update({
+      name: info.name,
+      result,review_status:'1'});
   }
 
   async applyAction(){
@@ -203,6 +207,9 @@ export default class extends Base {
 
     if(keyword){
       let result = await this.model('company_apply').where({'name|uscc':['LIKE', `%${keyword}%`],review_status:'2'}).page(0,20).select();
+      if(think.isEmpty(result)){
+        return this.redirect(`/cc?keyword=${encodeURIComponent(keyword)}`);
+      }
       this.assign({result});
     }
     return this.display();

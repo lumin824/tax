@@ -92,6 +92,7 @@ export default class extends Base {
       return key2code[key] || key;
     });
     info = _.mapValues(info, o=>o[1]);
+    info.name = _.trim($('.page-channel-header h1').text());
     return {info,infos, fmjl, schmd};
   }
 
