@@ -1,0 +1,75 @@
+{% extends "index_base.html" %}
+
+{% block content %}
+
+<!--=== Search Block Version 2 ===-->
+<div class="search-block">
+    <div class="container">
+        <div class="col-md-6 col-md-offset-3">
+            <form class="sky-form" style="border:none;" action="/company/search" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="keyword" value="{{http.query.keyword}}" placeholder="请输入单位/个人名称/代码/产品">
+
+                    <span class="input-group-btn">
+                        <button class="btn-u" type="submit"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+
+                <!-- <div class="inline-group">
+                    <label class="radio">
+                      <input type="radio" name="templateId" value="" {{'checked' if not http.query.templateId}}>
+                      <i class="rounded-x"></i> 全部
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="templateId" value="1,6,7" {{'checked' if http.query.templateId=='1,6,7'}}>
+                      <i class="rounded-x"></i>失信
+                    </label>
+                </div> -->
+            </form>
+        </div>
+    </div>
+</div><!--/container-->
+<!--=== End Search Block Version 2 ===-->
+
+{% if result.length %}
+<div class="container content-sm">
+    <div class="table-search-v1 margin-bottom-30">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>单位/个人</th>
+                    <th>社会信用代码/税务代码</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for o in result %}
+                  <tr>
+                    <td>
+                      <a href="/company/apply_result?id={{o.id}}">{{o.name}}</a>
+                    </td>
+                    <td><a href="/company/apply_result?id={{o.id}}">{{o.uscc}}</a></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% elif http.query.keyword.length %}
+<div class="container content-sm">
+<div class="row">
+    <div class="col-md-8 col-md-offset-2 text-center">
+        <h2>没有找到结果</h2>
+    </div>
+</div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/in/plugins/sky-forms-pro/skyforms/css/sky-forms.css">
+<link rel="stylesheet" href="/static/in/plugins/sky-forms-pro/skyforms/custom/custom-sky-forms.css">
+<!--[if lt IE 9]><link rel="stylesheet" href="assets/plugins/sky-forms-pro/skyforms/css/sky-forms-ie8.css"><![endif]-->
+{% endblock %}

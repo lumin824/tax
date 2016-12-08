@@ -3,11 +3,11 @@
 {% block content %}
 
 <div class="row">
-<div class="col-md-8 col-md-offset-2">
+    <div class="col-md-8 col-md-offset-2">
         <!-- General Unify Forms -->
         <form method="post" action="/company/apply" class="sky-form">
             <input type="hidden" name="id" value="{{item.id}}" />
-            <header>申请核查信息</header>
+            <header>提请审核</header>
             {% if item.gs_errmsg %}
             <div class="alert alert-danger alert-dismissible" role="alert">
               <button type="button" class="close" data-dismiss="alert">
@@ -27,7 +27,7 @@
 
             <fieldset>
                 <section>
-                    <label class="label">公司名称</label>
+                    <label class="label">单位/个人名称</label>
                     <label class="input">
                         <input type="text" name="name" value={{item.name}}>
                     </label>
@@ -42,7 +42,7 @@
 
                 <section class="row">
                   <div class="col-md-6">
-                    <label class="label">国税代码</label>
+                    <label class="label">或：国税代码</label>
                     <label class="input {{'state-error' if item.gs_errno == 'ERR_01'}}">
                         <input type="text" name="gs_username" value="{{item.gs_username}}">
                     </label>
@@ -59,27 +59,35 @@
                   <div class="col-md-6">
                     <label class="label">国税密码</label>
                     <label class="input {{'state-error' if item.gs_errno == 'ERR_02'}}">
-                        <input type="password" name="gs_password" value="{{item.gs_password}}">
+                        <input type="text" name="gs_password" value="{{item.gs_password}}">
                     </label>
                   </div>
                   <div class="col-md-6">
                     <label class="label">地税密码</label>
                     <label class="input {{'state-error' if item.ds_errno == 'ERR_02'}}">
-                        <input type="password" name="ds_password" value="{{item.ds_password}}">
+                        <input type="text" name="ds_password" value="{{item.ds_password}}">
                     </label>
                   </div>
                 </section>
 
-                <section>
-                    <label class="label">联系方式</label>
+                <section class="row">
+                  <div class="col-md-6">
+                    <label class="label">联系人</label>
                     <label class="input">
-                        <input type="text">
+                        <input type="text" name="contact_name" value="">
                     </label>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="label">联系电话</label>
+                    <label class="input">
+                        <input type="text" name="contact_mobile" value="">
+                    </label>
+                  </div>
                 </section>
             </fieldset>
 
             <footer>
-                <button type="submit" class="btn-u">申请审核</button>
+                <button type="submit" class="btn-u">提交申请</button>
             </footer>
         </form>
     </div>
@@ -88,13 +96,20 @@
 
 {% block script %}
 <script src="//cdn.bootcss.com/jquery-validate/1.13.0/jquery.validate.min.js"></script>
-<script src="//cdn.bootcss.com/lodash.js/4.16.4/lodash.min.js"></script>
+
+<script src="/static/plugins/suggest/jquery.suggest.js"></script>
+
 <script>
   $(function(){
 
-    reloadCaptcha = function(){
-      $('#img-captcha').attr('src', '/jsgs/captcha?_='+moment().unix());
+    if(window.localStorage){
+      var list = JSON.parse(localStorage.getItem('apply_uscc_list') || '[]');
+      if(list.length > 0){
+        $('[name=uscc]').suggest({words:list})
+      }
+
     }
+
     $('form').validate({
       submitHandler:function(form){
         var $form = $(form);
@@ -112,10 +127,17 @@
           success: function(resp){
             if(resp.errno == 0){
               alert('申请审核成功');
+
+              if(window.localStorage){
+                var list = JSON.parse(localStorage.getItem('apply_uscc_list') || '[]');
+                if(!~list.indexOf(data.uscc)){
+                  list.push(data.uscc);
+                  localStorage.setItem('apply_uscc_list', JSON.stringify(list));
+                }
+              }
               if(resp.data.redirect) location.href = resp.data.redirect;
               else if(resp.data.reload) location.reload();
             }else{
-              reloadCaptcha();
               alert(resp.errmsg);
             }
           }

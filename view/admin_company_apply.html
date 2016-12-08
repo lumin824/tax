@@ -19,6 +19,29 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox ">
+                <div class="ibox-content" id="search-params">
+                  <div class="form-group">
+                      <label class="col-xs-4 col-sm-2 control-label">审核状态</label>
+                      <div class="col-xs-8 col-sm-10">
+                          <label class="radio-inline i-checks">
+                              <input type="radio" name="review_status" value="1" checked> 待审核
+                          </label>
+                          <label class="checkbox-inline i-checks">
+                              <input type="radio" name="review_status" value="2"> 已审核
+                          </label>
+                          <label class="checkbox-inline i-checks">
+                              <input type="radio" name="review_status" value=""> 全部
+                          </label>
+                      </div>
+                  </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
                 <div class="ibox-content">
                     <div class="jqGrid_wrapper">
                         <table id="jqgrid-table"></table>
@@ -37,23 +60,37 @@
 <script src="/static/in/js/plugins/jqGrid/i18n/grid.locale-cn.js"></script>
 <script src="/static/in/js/plugins/jqGrid/jquery.jqGrid.min.js"></script>
 
+<!-- iCheck -->
+<script src="/static/in/js/plugins/iCheck/icheck.min.js"></script>
 <script>
-    $(document).ready(function () {
+    $(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+</script>
+
+<script>
+    var review_status = {{config.app.review_status|dump|safe}};
+    $(function () {
         $("#jqgrid-table").jqGrid({
             url:'/admin/company_apply',
             editurl:'/admin/company_apply_edit',
+            postData:{ review_status:$('[name=review_status]:checked').val()},
             mtype:'post',
             datatype: 'json',
             autowidth: true,
             height: '100%',
             rowNum: 20,
             rowList: [10, 20, 30],
-            colNames:['#','公司名称', '社会信用代码', '申请时间','最近审核时间','操作'],
+            colNames:['#','公司名称', '社会信用代码', '申请时间','审核状态','最近审核时间','操作'],
             colModel:[
                 {name:'id', width:50, sortable:false},
                 {name:'name', width:150},
                 {name:'uscc', width:120},
                 {name:'create_time', width:120, formatter:'date', formatoptions: { srcformat:'u', newformat:'Y-m-d H:i:s'}},
+                {name:'review_status', width:80, formatter: function(cell, opt, row){ return review_status[cell] || cell; }},
                 {name:'update_time', width:120, formatter:'date', formatoptions: { srcformat:'u', newformat:'Y-m-d H:i:s'}},
                 {name:'id', width: 100, sortable: false, formatter: function(cell, opt, row){
                   return ''
@@ -83,6 +120,16 @@
             $('.wrapper-content').removeClass('animated fadeInRight');
         },700);
 
+        $('#search-params .i-checks input[type=radio]').on('ifChecked', function(e){
+          var $target = $(e.currentTarget);
+          var val = $target.val(),
+              name = $target.attr('name');
+          var jqgrid = $('#jqgrid-table');
+          var postData = jqgrid.jqGrid('getGridParam', 'postData');
+          $.extend(postData, { [name]: val });
+          jqgrid.jqGrid('setGridParam', { search: true }).trigger('reloadGrid', [{ page: 1}]);
+        });
+
     });
 
 </script>
@@ -91,4 +138,6 @@
 {% block css %}
 <link href="/static/in/css/plugins/jQueryUI/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
 <link href="/static/in/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+<link href="/static/in/css/plugins/iCheck/custom.css" rel="stylesheet">
+
 {% endblock %}

@@ -137,7 +137,8 @@
                   </li>
                   <li class="dropdown">
                       <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-                          <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
+                          <i class="fa fa-bell"></i>
+                          <span class="label label-primary" id="task-count"></span>
                       </a>
                       <ul class="dropdown-menu dropdown-alerts">
                           <li>
@@ -663,6 +664,12 @@
         </div>
     </div>
 
+    <audio id='notify-sound'>
+      <source src="/static/sound/notify.ogg" type="audio/ogg">
+      <source src="/static/sound/notify.mp3" type="audio/mpeg">
+      <source src="/static/sound/notify.wav" type="audio/wav">
+    </audio>
+
     <!-- Mainly scripts -->
     <script src="/static/in/js/jquery-2.1.1.js"></script>
     <script src="/static/in/js/bootstrap.min.js"></script>
@@ -706,6 +713,45 @@
 
     {% block script %}
     {% endblock %}
+
+    <script>
+      let task_count;
+      $(function(){
+
+        var timeoutQuery = function(millisec){
+          setTimeout(function(){
+            var url = '/admin/task_count';
+            $.ajax({
+              url: url,
+              type: 'post',
+              success: function(resp) {
+                var sum;
+                var count_change = false;
+                if(!task_count){
+                  task_count = resp.data;
+                  sum = task_count.apply.review_status_1;
+                  $('#task-count').text(sum ? sum : '');
+                }else{
+                  var new_task_count = resp.data;
+                  if(new_task_count.apply.review_status_1 > task_count.apply.review_status_1){
+                    count_change = true;
+                  }
+                  if(count_change){
+                    task_count = new_task_count;
+                    $('#notify-sound').each(function(){ this.play(); });
+                    sum = task_count.apply.review_status_1;
+                    $('#task-count').text(sum ? sum : '');
+                  }
+                }
+                timeoutQuery(10000);
+              }
+            });
+          }, millisec);
+        };
+
+        timeoutQuery(1000);
+      });
+    </script>
 
 
 </body>

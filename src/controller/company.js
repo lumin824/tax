@@ -36,7 +36,7 @@ export default class extends Base {
     return this.display();
   }
 
-  async _process(gs_api, ds_api, cc_api){
+  async _process(gs_api, ds_api, cc_api, id){
     let gs_data = await gs_api.data(),
         ds_data = await ds_api.data();
 
@@ -92,7 +92,24 @@ export default class extends Base {
     };
 
     result = JSON.stringify(result);
-    this.model('company_apply').where({id}).update({result});
+    this.model('company_apply').where({id}).update({result,review_status:'1'});
+  }
+
+  async _process_cc(cc_api, id, name, uscc, gs_username, ds_username){
+
+    let cc_data = await cc_api.data(name);
+
+    let info = {
+      ...cc_data.info,
+    };
+
+    let result = {
+      info,
+      cc_data,
+    };
+
+    result = JSON.stringify(result);
+    this.model('company_apply').where({id}).update({result,review_status:'1'});
   }
 
   async applyAction(){
@@ -109,38 +126,59 @@ export default class extends Base {
       let current_unix = moment().unix();
       if(id){
         data.update_time = current_unix;
+        data.review_status = '';
+        data.gs_errno = data.gs_errmsg = '';
+        data.ds_errno = data.ds_errmsg = '';
         await this.model('company_apply').where({id}).update(data);
         ret.reload = true;
       }else{
         data.create_time = current_unix;
+        data.review_status = '';
         id = await this.model('company_apply').add(data);
-        ret.redirect = `/company/apply?id=${id}`;
+        ret.reload = true;
       }
-      let gs_api = new JsgsAPI(),
-          ds_api = new JsdsAPI(),
-          cc_api = new CcAPI();
 
-      let login_success = true;
-      {
+      let area_code = '';
+      if(data.uscc.length == 18) area_code = data.uscc.substr(2,2);
+      else if(data.gs_username) area_code = data.gs_username.substr(0,2);
+      else if(data.ds_username) area_code = data.ds_username.substr(0,2);
+
+      let gs_api, ds_api,
+          cc_api = new CcAPI();
+      if(area_code == '32'){
+        gs_api = new JsgsAPI();
+        ds_api = new JsdsAPI();
+      }
+
+      let has_error = false;
+      if(gs_api){
         let username = data.gs_username || data.uscc;
         let {errno:gs_errno,errmsg:gs_errmsg} = await gs_api.login(username, data.gs_password);
         while(~gs_errmsg.indexOf('验证码')){
           ({errno:gs_errno,errmsg:gs_errmsg} = await gs_api.login(username, data.gs_password));
         }
-        if(gs_errno != '0') login_success = false;
+        if(gs_errno != '0') has_error = true;
         this.model('company_apply').where({id}).update({gs_errno, gs_errmsg});
       }
-      {
+
+      if(ds_api){
         let username = data.ds_username || data.uscc;
         let {errno:ds_errno,errmsg:ds_errmsg} = await ds_api.login(username, data.ds_password);
-        if(ds_errno != '0') login_success = false;
+        if(ds_errno != '0') has_error = true;
         this.model('company_apply').where({id}).update({ds_errno, ds_errmsg});
       }
 
-      if(login_success){
+      if(!has_error){
+        await this.model('company_apply').where({id}).update({
+          review_status:'3'
+        });
 
-        this._process(gs_api, ds_api, cc_api);
-        ret.redirect = `/company/apply_result?id=${id}`;
+        if(gs_api && ds_api)
+          this._process(gs_api, ds_api, cc_api, id);
+        else
+          this._process_cc(cc_api, id, data.name, data.uscc, data.gs_username, data.ds_username);
+        //ret.redirect = `/company/apply_result?id=${id}`;
+        ret.reload = true;
       }
 
       return this.success(ret);
@@ -158,5 +196,15 @@ export default class extends Base {
     let { id } = this.param();
     let { create_time, update_time } = await this.model('company_apply').where({id}).find();
     return this.success({ create_time, update_time });
+  }
+
+  async searchAction(){
+    let { keyword } = this.param();
+
+    if(keyword){
+      let result = await this.model('company_apply').where({'name|uscc':['LIKE', `%${keyword}%`],review_status:'2'}).page(0,20).select();
+      this.assign({result});
+    }
+    return this.display();
   }
 }

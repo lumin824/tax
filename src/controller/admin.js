@@ -98,7 +98,17 @@ export default class extends Base {
       return this.display();
     }else{
       let {page, rows, searchField, searchString, searchOper, sidx, sord, key} = this.param();
-      let data = await this.model('company_apply').page(page, rows).countSelect();
+      let { review_status } = this.param();
+      let where = {};
+
+      if(review_status){
+        where.review_status = review_status.split(',');
+      }
+
+      let dao = this.model('company_apply').page(page, rows);
+      if(_.size(where) > 0)
+        dao.where(where);
+      let data = await dao.countSelect();
       return this.json({
         page: data.currentPage,
         records: data.count,
@@ -117,12 +127,11 @@ export default class extends Base {
       let resultJson = JSON.parse(item.result || '{}');
       let { taxValue } = resultJson;
       let curYear = moment().year();
-      this.assign({item,taxValue, taxValueKey:[curYear,curYear-1,curYear-2,curYear-3]});
+      this.assign({item,resultJson,taxValue, taxValueKey:[curYear,curYear-1,curYear-2,curYear-3]});
       return this.display();
     }else{
       let { id, oper, ...data } = this.param();
       if(oper == 'edit_taxList'){
-
         data = _.mapValues(data, (o,k)=>{
           let ks = k.split('_');
           return {
@@ -153,10 +162,15 @@ export default class extends Base {
         };
         await this.model('company_apply').where({id}).update({
           result: JSON.stringify(resultJson),
-          update_time: moment().unix()
+          update_time: moment().unix(),
+          review_status: '2'
         })
+        return this.success({back:true});
+      }else if(oper == 'del'){
+        await this.model('company_apply').where({id:id.split(',')}).delete();
+        return this.success();
       }
-      return this.success({reload:true});
+
     }
   }
 
@@ -195,5 +209,15 @@ export default class extends Base {
       }
       return this.success({});
     }
+  }
+
+  async taskCountAction(){
+
+    let ret = {
+      apply: {
+        review_status_1: await this.model('company_apply').where({review_status:'1'}).count()
+      }
+    }
+    return this.success(ret);
   }
 }
