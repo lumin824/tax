@@ -26,12 +26,6 @@
             {% endif %}
 
             <fieldset>
-                <section>
-                    <label class="label">单位/个人名称</label>
-                    <label class="input">
-                        <input type="text" name="name" value={{item.name}}>
-                    </label>
-                </section>
 
                 <section>
                     <label class="label">社会信用代码</label>
@@ -39,6 +33,15 @@
                         <input type="text" name="uscc" value="{{item.uscc}}">
                     </label>
                 </section>
+                
+                <section>
+                    <label class="label">单位/个人名称</label>
+                    <label class="input">
+                        <input type="text" name="name" value={{item.name}}>
+                    </label>
+                </section>
+
+
 
                 <section class="row">
                   <div class="col-md-6">
