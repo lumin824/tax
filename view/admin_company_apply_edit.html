@@ -109,25 +109,25 @@
                           <tr>
                             <td>发票情况</td>
                             {% for o in taxValueKey %}
-                            <td><input name="{{o}}_fapiao" value="{{taxValue[o].fapiao}}"></td>
+                            <td><textarea rows="3" name="{{o}}_fapiao">{{taxValue[o].fapiao}}</textarea></td>
                             {% endfor %}
                           </tr>
                           <tr>
                             <td>特别调整</td>
                             {% for o in taxValueKey %}
-                            <td><input name="{{o}}_remark" value="{{taxValue[o].remark}}"></td>
+                            <td><textarea rows="3" name="{{o}}_remark">{{taxValue[o].remark}}</textarea></td>
                             {% endfor %}
                           </tr>
                           <tr>
                             <td>相关说明</td>
                             {% for o in taxValueKey %}
-                            <td><input name="{{o}}_other" value="{{taxValue[o].other}}"></td>
+                            <td><textarea rows="3" name="{{o}}_other">{{taxValue[o].other}}</textarea></td>
                             {% endfor %}
                           </tr>
                           <tr>
                             <td>综合评价</td>
                             {% for o in taxValueKey %}
-                            <td><input name="{{o}}_pingjia" value="{{taxValue[o].pingjia}}"></td>
+                            <td><textarea rows="3" name="{{o}}_pingjia">{{taxValue[o].pingjia}}</textarea></td>
                             {% endfor %}
                           </tr>
 
@@ -252,6 +252,47 @@
                               </table>
                             </div>
                             <div id="tab-3" class="tab-pane p-xs">
+                              <div class="tabs-container">
+
+                                  <div class="tabs-left">
+                                      <ul class="nav nav-tabs">
+                                        {% for k,o in resultJson.taxGroup %}
+                                        <li class="{{'active' if loop.index == 1}}"><a data-toggle="tab" href="#tax-group-{{loop.index}}">{{k}}</a></li>
+                                        {% endfor %}
+                                      </ul>
+                                      <div class="tab-content ">
+                                        {% for k,p in resultJson.taxGroup %}
+                                        <div id="tax-group-{{loop.index}}" class="tab-pane {{'active' if loop.index == 1}}">
+                                            <div class="panel-body">
+                                              <table class="table table-bordered table-striped">
+                                                <thead>
+                                                  <tr>
+                                                    <th>名称</th>
+                                                    <th>金额</th>
+                                                    <th>时间</th>
+                                                    <th>备注</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {% for o in p %}
+                                                  <tr>
+                                                    <td>{{o.name}}</td>
+                                                    <td>{{o.money}}</td>
+                                                    <td>{{o.time}}</td>
+                                                    <td>{{o.remark}}</td>
+                                                  </tr>
+                                                  {% endfor %}
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                      </div>
+
+                                  </div>
+
+                              </div>
+
                               <table class="table table-bordered table-striped">
                                 <thead>
                                   <tr>

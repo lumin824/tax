@@ -106,7 +106,7 @@ export default class extends Base {
       }
 
       let dao = this.model('company_apply')
-        .field('id','name','uscc','create_time','review_status','update_time')
+        .field('id,name,uscc,create_time,review_status,update_time')
         .page(page, rows);
       if(_.size(where) > 0)
         dao.where(where);
@@ -127,6 +127,7 @@ export default class extends Base {
 
       let item = await this.model('company_apply').where({id}).find();
       let resultJson = JSON.parse(item.result || '{}');
+      resultJson.taxGroup = _.groupBy(resultJson.taxList, o=>o.time&&o.time.split('-')[0]);
       let { taxValue } = resultJson;
       let curYear = moment().year();
       this.assign({item,resultJson,taxValue, taxValueKey:[curYear,curYear-1,curYear-2,curYear-3]});
@@ -138,9 +139,11 @@ export default class extends Base {
           let ks = k.split('_');
           return {
             year:ks[0],
-            [ks[1]]:o?parseFloat(o):0
+            [ks[1]]:~['tax','assets','capital','equity','liability','revenue','interest'].indexOf(ks[1])?parseFloat(o):o
           }
         });
+
+        console.log(data);
         data = _.groupBy(data, 'year');
         data = _.mapValues(data, o=>{
           let { year, ...v} = _.merge(...o);
