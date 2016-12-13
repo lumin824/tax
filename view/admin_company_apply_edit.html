@@ -292,27 +292,6 @@
                                   </div>
 
                               </div>
-
-                              <table class="table table-bordered table-striped">
-                                <thead>
-                                  <tr>
-                                    <th>名称</th>
-                                    <th>金额</th>
-                                    <th>时间</th>
-                                    <th>备注</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {% for o in resultJson.taxList %}
-                                  <tr>
-                                    <td>{{o.name}}</td>
-                                    <td>{{o.money}}</td>
-                                    <td>{{o.time}}</td>
-                                    <td>{{o.remark}}</td>
-                                  </tr>
-                                  {% endfor %}
-                                </tbody>
-                              </table>
                             </div>
                             <div id="tab-4" class="tab-pane p-xs">
                               <table class="table table-bordered table-striped">
