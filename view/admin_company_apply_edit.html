@@ -106,22 +106,23 @@
                             <td><input class="full-width" name="{{o}}_interest" value="{{taxValue[o].interest}}"></td>
                             {% endfor %}
                           </tr>
-                          <tr>
-                            <td>发票情况</td>
-                            {% for o in taxValueKey %}
-                            <td><textarea class="full-width" rows="3" name="{{o}}_fapiao">{{taxValue[o].fapiao}}</textarea></td>
-                            {% endfor %}
-                          </tr>
+
                           <tr>
                             <td>特别调整</td>
                             {% for o in taxValueKey %}
-                            <td><textarea class="full-width" rows="3" name="{{o}}_remark">{{taxValue[o].remark}}</textarea></td>
+                            <td><input class="full-width" name="{{o}}_remark" value="{{taxValue[o].remark}}"></td>
                             {% endfor %}
                           </tr>
                           <tr>
                             <td>相关说明</td>
                             {% for o in taxValueKey %}
                             <td><textarea class="full-width" rows="3" name="{{o}}_other">{{taxValue[o].other}}</textarea></td>
+                            {% endfor %}
+                          </tr>
+                          <tr>
+                            <td>发票情况</td>
+                            {% for o in taxValueKey %}
+                            <td><textarea class="full-width" rows="3" name="{{o}}_fapiao">{{taxValue[o].fapiao}}</textarea></td>
                             {% endfor %}
                           </tr>
                           <tr>
