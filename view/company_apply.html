@@ -27,66 +27,65 @@
 
             <fieldset>
 
-                <section>
-                    <label class="label">社会信用代码</label>
+                <div class="row">
+                  <div class="col-md-12">
+                    <label class="label hide">社会信用代码</label>
                     <label class="input">
-                        <input type="text" name="uscc" value="{{item.uscc}}">
+                        <input type="text" name="uscc" value="{{item.uscc}}" placeholder="社会信用代码">
                     </label>
-                </section>
-                
-                <section>
-                    <label class="label">单位/个人名称</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <label class="label hide">单位/个人名称</label>
                     <label class="input">
-                        <input type="text" name="name" value={{item.name}}>
+                        <input type="text" name="name" value="{{item.name}}" placeholder="单位/个人名称">
                     </label>
-                </section>
-
-
-
-                <section class="row">
+                  </div>
+                </div>
+                <div class="row">
                   <div class="col-md-6">
-                    <label class="label">或：国税代码</label>
+                    <label class="label hide">或：国税代码</label>
                     <label class="input {{'state-error' if item.gs_errno == 'ERR_01'}}">
-                        <input type="text" name="gs_username" value="{{item.gs_username}}">
+                        <input type="text" name="gs_username" value="{{item.gs_username}}" placeholder="或：国税代码">
                     </label>
                   </div>
                   <div class="col-md-6">
-                    <label class="label">地税代码</label>
+                    <label class="label hide">地税代码</label>
                     <label class="input {{'state-error' if item.ds_errno == 'ERR_01'}}">
-                        <input type="text" name="ds_username" value="{{item.ds_username}}">
+                        <input type="text" name="ds_username" value="{{item.ds_username}}" placeholder="地税代码">
                     </label>
                   </div>
-                </section>
-
-                <section class="row">
+                </div>
+                <div class="row">
                   <div class="col-md-6">
-                    <label class="label">国税密码</label>
+                    <label class="label hide">国税密码</label>
                     <label class="input {{'state-error' if item.gs_errno == 'ERR_02'}}">
-                        <input type="text" name="gs_password" value="{{item.gs_password}}">
+                        <input type="text" name="gs_password" value="{{item.gs_password}}" placeholder="国税密码">
                     </label>
                   </div>
                   <div class="col-md-6">
-                    <label class="label">地税密码</label>
+                    <label class="label hide">地税密码</label>
                     <label class="input {{'state-error' if item.ds_errno == 'ERR_02'}}">
-                        <input type="text" name="ds_password" value="{{item.ds_password}}">
+                        <input type="text" name="ds_password" value="{{item.ds_password}}" placeholder="地税密码">
                     </label>
                   </div>
-                </section>
+                </div>
 
-                <section class="row">
+                <div class="row">
                   <div class="col-md-6">
-                    <label class="label">联系人</label>
+                    <label class="label hide">联系人</label>
                     <label class="input">
-                        <input type="text" name="contact_name" value="">
+                        <input type="text" name="contact_name" value="{{item.contact_name}}" placeholder="联系人">
                     </label>
                   </div>
                   <div class="col-md-6">
-                    <label class="label">联系电话</label>
+                    <label class="label hide">联系电话</label>
                     <label class="input">
-                        <input type="text" name="contact_mobile" value="">
+                        <input type="text" name="contact_mobile" value="{{item.contact_mobile}}" placeholder="联系电话">
                     </label>
                   </div>
-                </section>
+                </div>
             </fieldset>
 
             <footer>
