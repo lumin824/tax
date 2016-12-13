@@ -1,1 +1,8 @@
 /* Add here all your css styles (customizations) */
+
+
+.padding-xxs-horizontal
+{
+  padding-left: 2px;
+  padding-right: 2px;
+}
