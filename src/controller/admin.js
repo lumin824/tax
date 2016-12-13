@@ -105,7 +105,9 @@ export default class extends Base {
         where.review_status = review_status.split(',');
       }
 
-      let dao = this.model('company_apply').page(page, rows);
+      let dao = this.model('company_apply')
+        .field('id','name','uscc','create_time','review_status','update_time')
+        .page(page, rows);
       if(_.size(where) > 0)
         dao.where(where);
       let data = await dao.countSelect();
