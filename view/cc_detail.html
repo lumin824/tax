@@ -16,7 +16,7 @@
     </div>
     <div class="panel-body">
       {% for o in result.infos[0][0] %}
-      {{o}}<br>
+      {{o.replace('00:00:00.000','')}}<br>
       {% endfor %}
     </div>
   </div>
