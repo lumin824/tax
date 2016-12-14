@@ -40,8 +40,6 @@
                   <tr>
                     <th>主体类型</th>
                     <th>组织机构/身份证号</th>
-                    <th>纪录类型</th>
-                    <th>归属地址</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -51,12 +49,6 @@
                       <a href="/cc/detail?objectType={{o.objectType}}&encryStr={{o.encryStr}}" target="_blank">{{o.name}}</a>
                     </td>
                     <td>{{o.idCardOrOrgCode}}</td>
-                    <td>
-                      <span class="label label-info">{{o.goodCount}}</span>
-                      <span class="label label-warning">{{o.badCount}}</span>
-                      <span class="label label-danger">{{o.dishonestyCount}}</span>
-                    </td>
-                    <td>{{o.area}}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
