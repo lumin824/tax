@@ -37,12 +37,15 @@ export default class extends Base {
   }
 
   async _process(gs_api, ds_api, cc_api, id){
-    let gs_data = await gs_api.data(),
-        ds_data = await ds_api.data();
+    let gs_data = gs_api ? (await gs_api.data()) : {},
+        ds_data = ds_api ? (await ds_api.data()) : {};
 
+    console.log('整合数据中...');
     let info = {
       ...ds_data.info, ...gs_data.info
     };
+
+    console.log('整合1');
 
     let cc_data = await cc_api.data(info.name);
 
@@ -51,16 +54,26 @@ export default class extends Base {
       ...cc_data.info,
     };
 
+    console.log('整合2');
+
     let taxMoneyList = _.mapValues(_.mapKeys(ds_data.taxMoneyList,'year'),o=>{
       let {year, ...oth} = o;
       return oth;
     });
 
+    console.log('整合3');
 
     let taxList = _.sortBy([...gs_data.taxList, ...ds_data.taxList],'time');
+    console.log('整合3.1');
+    taxList = _.compact(taxList);
+    console.log(taxList);
     let taxValue = _.mapValues(_.groupBy(taxList, o=>o.time.split('-')[0]), o=>({tax:_.sumBy(o, o=>parseFloat(o.money))}));
+    console.log('整合3.2');
     let { zczb } = info;
+    console.log('整合3.3');
     zczb = parseInt(zczb);
+
+    console.log('整合4');
 
     taxValue = _.merge(taxValue,taxMoneyList);
 
@@ -76,6 +89,9 @@ export default class extends Base {
       gc:(o.capital && o.tax) ? (100*o.tax/parseFloat(o.capital)).toFixed(2) : '0.00',
     }));
 
+
+    console.log('整合5');
+
     let cwbbList = [
       ...gs_data.cwbbList,
       ...ds_data.cwbbList
@@ -90,6 +106,8 @@ export default class extends Base {
       info,
       cwbbList
     };
+
+    console.log('整合6');
 
     result = JSON.stringify(result);
     this.model('company_apply').where({id}).update({
@@ -154,36 +172,40 @@ export default class extends Base {
         ds_api = new JsdsAPI();
       }
 
-      let has_error = false;
+      console.log('国税验证中...')
       if(gs_api){
         let username = data.gs_username || data.uscc;
         let {errno:gs_errno,errmsg:gs_errmsg} = await gs_api.login(username, data.gs_password);
-        while(~gs_errmsg.indexOf('验证码')){
+        while(gs_errno == 'ERR_03'){
           ({errno:gs_errno,errmsg:gs_errmsg} = await gs_api.login(username, data.gs_password));
         }
-        if(gs_errno != '0') has_error = true;
+        if(gs_errno != '0') gs_api = null;
+        console.log('国税登录结果:'+gs_errno+'='+gs_errmsg);
         this.model('company_apply').where({id}).update({gs_errno, gs_errmsg});
       }
 
+      console.log('地税验证中...')
       if(ds_api){
         let username = data.ds_username || data.uscc;
         let {errno:ds_errno,errmsg:ds_errmsg} = await ds_api.login(username, data.ds_password);
-        if(ds_errno != '0') has_error = true;
+        while(ds_errno == 'ERR_03'){
+          ({errno:ds_errno,errmsg:ds_errmsg} = await ds_api.login(username, data.ds_password));
+        }
+        if(ds_errno != '0') ds_api = null;
+        console.log('地税登录结果:'+ds_errno+'='+ds_errmsg);
         this.model('company_apply').where({id}).update({ds_errno, ds_errmsg});
       }
 
-      if(!has_error){
-        await this.model('company_apply').where({id}).update({
-          review_status:'3'
-        });
+      await this.model('company_apply').where({id}).update({
+        review_status:'3'
+      });
 
-        if(gs_api && ds_api)
-          this._process(gs_api, ds_api, cc_api, id);
-        else
-          this._process_cc(cc_api, id, data.name, data.uscc, data.gs_username, data.ds_username);
-        //ret.redirect = `/company/apply_result?id=${id}`;
-        ret.reload = true;
-      }
+      if(gs_api || ds_api)
+        this._process(gs_api, ds_api, cc_api, id);
+      else
+        this._process_cc(cc_api, id, data.name, data.uscc, data.gs_username, data.ds_username);
+      //ret.redirect = `/company/apply_result?id=${id}`;
+      ret.reload = true;
 
       return this.success(ret);
     }

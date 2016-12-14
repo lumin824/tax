@@ -206,7 +206,11 @@
 				<li><a href="#tab-3" data-toggle="tab">税款明细</a></li>
 				<li><a href="#tab-4" data-toggle="tab">财务报表</a></li>
         #}
-        <li><a href="#tab-5" data-toggle="tab">特别资信</a></li>
+        <li><a href="#tab-5" data-toggle="tab">特别资信
+          {% if resultJson.cc_data.sxdj %}
+          : 失信等级T {{resultJson.cc_data.sxdj}}*
+          {% endif %}
+        </a></li>
 		</ul>
 		<div class="tab-content">
 				<div class="tab-pane fade in active" id="tab-1">
@@ -365,7 +369,42 @@
 				</div>
         #}
         <div class="tab-pane fade in" id="tab-5">
-          涉案金额总计：0元
+          涉案金额总计：{{resultJson.cc_data.sxje}}元<br><br>
+          {% for o in resultJson.cc_data.fmjl %}
+          {{o.frxm}}<br>
+          {{o.wfss}}<br>
+          {{o.cfqk}}<br>
+          涉案金额：{{o.je}}元<br>
+          <hr>
+          {% endfor %}
+          {% for o in resultJson.cc_data.schmd %}
+          {{o.ah}}{% if o.ah %}<br>{% endif %}
+          {{o.frxm}}{% if o.frxm %}<br>{% endif %}
+          {{o.qdyw}}{% if o.qdyw %}<br>{% endif %}
+          {{o.blxw}}{% if o.blxw %}<br>{% endif %}
+          {{o.cfjg}}{% if o.cfjg %}<br>{% endif %}
+          涉案金额：{{o.je}}元<br>
+          <hr>
+          {% endfor %}
+
+          <h1>失信纪录</h1>
+
+          {% for o in result.infos[2] %}
+          {% for p in o %}
+          {{p}}<br>
+          {% endfor %}
+          <hr>
+          {% endfor %}
+          
+          {% for o in resultJson.cc_data.infos[3] %}
+          {% for p in o %}
+          {{p}}<br>
+          {% endfor %}
+          <hr>
+          {% endfor %}
+
+
+
 				</div>
 		</div>
 </div>

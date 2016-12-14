@@ -83,6 +83,9 @@ export default class extends Base {
       if(errno == '0001'){
         errno = 'ERR_02';
         errmsg = '密码错误';
+      }else if(errno == '0002'){
+        errno = 'ERR_03';
+        errmsg = '验证码错误';
       }else{
         errno = 'SYS_' + errno;
       }
@@ -263,6 +266,7 @@ export default class extends Base {
   }
 
   async data(){
+    console.log('国税获取数据中...');
     let swdjxx = await this.fetch_swdjxx();
     //let skjn = await this.fetch_skjn('2012-01-01','2016-12-31');
     let wspz = await this.fetch_wspz('2012-01-01','2016-12-31','');

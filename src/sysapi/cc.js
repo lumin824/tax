@@ -84,6 +84,12 @@ export default class extends Base {
       return { ah, frxm, qdyw, blxw, cfjg, je};
     });
 
+    let sxje = _.sumBy(fmjl, 'je') + _.sumBy(schmd, 'je');
+    let sxdj = 0;
+    if(sxje > 1000){
+      sxdj = (Math.log(sxje/1000) / Math.log(10)).toFixed(1);
+    }
+
     let key2code = {'工商注册号':'gszch','法人':'fr','企业类型':'qylx','住所':'zs','成立日期':'clrq'};
     let info = infos[0][0];
     info = _.map(info, o=>o.split('：'));
@@ -93,7 +99,8 @@ export default class extends Base {
     });
     info = _.mapValues(info, o=>o[1]);
     info.name = _.trim($('.page-channel-header h1').text());
-    return {info,infos, fmjl, schmd};
+    //this.assign({result, fmjl, schmd, sxje, sxdj});
+    return {info,infos, fmjl, schmd, sxje, sxdj};
   }
 
   async data(name){

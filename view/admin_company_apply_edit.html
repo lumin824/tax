@@ -37,8 +37,20 @@
                     <p>社会信用代码：{{item.uscc}}</p>
                     <p>国税代码：{{item.gs_username}}</p>
                     <p>地税代码：{{item.ds_username}}</p>
-                    <p>国税密码：{{item.gs_password}}</p>
-                    <p>地税密码：{{item.ds_password}}</p>
+                    <p>国税密码：{{item.gs_password}}
+                      {% if item.gs_errno != '0' %}
+                      <label class="label label-danger">
+                      {{item.gs_errno}}-{{item.gs_errmsg}}
+                      </lable>
+                      {% endif %}
+                    </p>
+                    <p>地税密码：{{item.ds_password}}
+                      {% if item.ds_errno != '0' %}
+                      <label class="label label-danger">
+                      {{item.ds_errno}}-{{item.ds_errmsg}}
+                      </lable>
+                      {% endif %}
+                    </p>
                 </div>
             </div>
         </div>

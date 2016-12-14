@@ -50,6 +50,9 @@ export default class extends Base {
       }else if(errno == '999902'){
         errno = 'ERR_02';
         errmsg = '密码错误';
+      }else if(errno == '999901'){
+        errno = 'ERR_03';
+        errmsg = '验证码错误';
       }else{
         errno = 'SYS_' + errno;
       }
@@ -144,6 +147,7 @@ export default class extends Base {
   }
 
   async fetch_cwbb(sbnf){
+    console.log('获取财务报表:'+sbnf);
     let { sessionId } = this._logininfo;
     let swglm = sessionId.split(';')[0];
     let cwbbjdqx = 'Y01_120';
@@ -156,12 +160,21 @@ export default class extends Base {
       }
     })
 
+    console.log('获取财务报表step1');
+    console.log(res.body);
     let $ = cheerio.load(res.body);
     let cwbbList = _.map($('#queryTb tr').toArray().slice(1), o=>{
       let $td = $('td', o);
+      console.log('debug1');
       let deal_args = $td.eq(6).find('input').attr('onclick');
+
+      if(!deal_args) return null;
+      console.log('debug2');
+      console.log(deal_args);
       deal_args = deal_args.substring(deal_args.indexOf('(')+1,deal_args.lastIndexOf(')'));
+      console.log('debug3');
       deal_args = _.map(deal_args.split(','),o=>o.substr(1,o.length-2));
+      console.log('debug4');
       let ret = {
         sbnf,
         bbzl: $td.eq(1).text().replace(/\s/g,''),
@@ -191,9 +204,14 @@ export default class extends Base {
     					+ "&bsqxdm=" + ret.bsqxdm+"&cwbbjdqx="+cwbbjdqx;
     		}
       }
+
+      console.log(ret.href);
       return ret;
     });
 
+    console.log('获取财务报表step2');
+
+    cwbbList = _.compact(cwbbList);
     for(let i in cwbbList){
       let res = await this.httpGet('http://www.jsds.gov.cn'+cwbbList[i].href);
       let $ = cheerio.load(res.body);
@@ -204,10 +222,13 @@ export default class extends Base {
       cwbbList[i].table = table;
     }
 
+    console.log('获取财务报表step3');
+
     return cwbbList;
   }
 
   async data(){
+    console.log('地税：获取数据中...');
     let { sessionId } = this._logininfo;
 
     // 纳税人基本信息
@@ -215,11 +236,13 @@ export default class extends Base {
 
     await this.httpGet('http://www.jsds.gov.cn/MainAction.do', {qs:{sessionId}});
     //let jkxx = await this.fetch_jkxx('2015-01-01','2016-12-31','');
+    console.log('地税：获取电子缴款...');
     let dzjk = [
       ...(await this.fetch_dzjk('2013-01-01','2016-12-31','','','1')),
       ...(await this.fetch_dzjk('2013-01-01','2016-12-31','','','2'))
     ];
 
+    console.log('地税：获取财务报表...');
     let cwbb = [
       ...await this.fetch_cwbb('2016'),
       ...await this.fetch_cwbb('2015'),
@@ -227,6 +250,7 @@ export default class extends Base {
       ...await this.fetch_cwbb('2013')
     ];
 
+    console.log('地税：获取财务报表完毕');
     let taxList = _.map(dzjk, o=>({
       name:o.sbblx,money:o.skhj,time:o.kkrq,remark:'地税-电子缴款'
     }));
