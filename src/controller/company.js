@@ -6,6 +6,11 @@ import moment from 'moment';
 
 import JsdsAPI from '../sysapi/jsds';
 import JsgsAPI from '../sysapi/jsgs';
+import ScgsAPI from '../sysapi/scgs';
+
+import SzgsAPI from '../sysapi/szgs';
+import SddsAPI from '../sysapi/sdds';
+
 import CcAPI from '../sysapi/cc';
 
 export default class extends Base {
@@ -46,13 +51,14 @@ export default class extends Base {
     };
 
     console.log('整合1');
-
+    console.log(info);
     let cc_data = await cc_api.data(info.name);
 
     info = {
       ...info,
       ...cc_data.info,
     };
+    console.log(info);
 
     console.log('整合2');
 
@@ -161,15 +167,27 @@ export default class extends Base {
       }
 
       let area_code = '';
-      if(data.uscc.length == 18) area_code = data.uscc.substr(2,2);
-      else if(data.gs_username) area_code = data.gs_username.substr(0,2);
-      else if(data.ds_username) area_code = data.ds_username.substr(0,2);
+      let city_code = '';
+      if(data.uscc.length == 18) { area_code = data.uscc.substr(2,2); city_code = data.uscc.substr(2,4);}
+      else if(data.gs_username) { area_code = data.gs_username.substr(0,2); city_code = data.gs_username.substr(0,4);}
+      else if(data.ds_username) { area_code = data.ds_username.substr(0,2); city_code = data.ds_username.substr(0,4);}
 
       let gs_api, ds_api,
           cc_api = new CcAPI();
       if(area_code == '32'){
         gs_api = new JsgsAPI();
         ds_api = new JsdsAPI();
+      } else if(area_code == '51'){
+        gs_api = new ScgsAPI();
+      }else if(area_code == '44'){
+        if(city_code == '4403'){
+          gs_api = new SzgsAPI();
+        }
+      }else if(area_code == '37'){
+        ds_api = new SddsAPI();
+      }else{
+        console.log(data);
+        return this.success();
       }
 
       console.log('国税验证中...')
