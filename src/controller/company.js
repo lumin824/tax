@@ -246,10 +246,20 @@ export default class extends Base {
     let { keyword } = this.param();
 
     if(keyword){
-      let result = await this.model('company_apply').where({'name|uscc':['LIKE', `%${keyword}%`],review_status:'2'}).page(0,20).select();
-      if(think.isEmpty(result)){
-        return this.redirect(`/cc?keyword=${encodeURIComponent(keyword)}`);
-      }
+      // let result = await this.model('company_apply').where({_complex:{
+      //   'JSON_EXTRACT(result, \'$.info.jyfw\')':['LIKE', `%${keyword}%`],
+      //   'name|uscc':['LIKE', `%${keyword}%`], _logic:'or'
+      // },review_status:'2'}).page(0,20).select();
+
+      let where = [
+        ... _.map(_.words(keyword),o=>`(name like '%${o}%' or uscc like '%${o}%' or JSON_EXTRACT(result, '$.info.jyfw') like '%${o}%')`),
+        'review_status=2'
+      ].join(' and ');
+
+      let result = await this.model('company_apply').where(where).page(0,20).select();
+      // if(think.isEmpty(result)){
+      //   return this.redirect(`/cc?keyword=${encodeURIComponent(keyword)}`);
+      // }
       this.assign({result});
     }
     return this.display();
