@@ -252,7 +252,7 @@ export default class extends Base {
       // },review_status:'2'}).page(0,20).select();
 
       let where = [
-        ... _.map(_.words(keyword),o=>`(name like '%${o}%' or uscc like '%${o}%' or JSON_EXTRACT(result, '$.info.jyfw') like '%${o}%')`),
+        ... _.map(_.words(keyword),o=>`(name like '%${o}%' or uscc like '%${o}%' or result like '%${o}%')`),
         'review_status=2'
       ].join(' and ');
 
