@@ -74,7 +74,17 @@ export default class extends Base {
     let info_tbl = $('table').eq(0);
     let info_tr = $('tr', info_tbl);
 
-    return {
+    let tzfxx_tr = $('#t_tzfxx tr').toArray().slice(1);
+
+
+    let tzfxx = _.map(tzfxx_tr, o=>({
+      tzfmc: $('[name=tzfxxvo_tzfmc]', o).val(),
+      zjzl: $('[name=tzfxxvo_zjzl]', o).val(),
+      zjhm: $('[name=tzfxxvo_zjhm]', o).val(),
+      tzbl: $('[name=tzfxxvo_tzbl]', o).val()
+    }));
+
+    let ret = {
       nsrmc: $('td', info_tr.eq(1)).eq(1).text(),
       nsrsbh: $('td', info_tr.eq(0)).eq(3).text(),
       scjyqx: $('td', info_tr.eq(4)).eq(3).text(),
@@ -87,7 +97,13 @@ export default class extends Base {
       cyrs: $('td', info_tr.eq(11)).eq(1).text(),
       wjrs: $('input', info_tr.eq(11)).val(),
       jyfw: $('td', info_tr.eq(13)).eq(1).text(),
+      zzhm: $('td', info_tr.eq(5)).eq(3).text(),
     };
+
+    if(tzfxx.length){
+      ret.tzfxx = tzfxx;
+    }
+    return ret;
   }
 
   // 缴款信息查询
@@ -427,6 +443,35 @@ export default class extends Base {
       }
     });
 
+    let ckzhList = await this.fetch_ckzh();
+    info.ckzhList = ckzhList;
+
     return {nsrjbxx,dzjk,taxList,taxMoneyList,info, cwbb,cwbbList};
+  }
+
+  async fetch_ckzh(){
+    let { sessionId } = this._logininfo;
+
+    let ret = await this.httpPost('http://www.jsds.gov.cn/NsrkhyhAction.do', {
+      qs: {
+        handleCode:'',sqzldm:'null',ssxmdm:'null',gnfldm:'null', sessionId,
+        jsonData:JSON.stringify({
+          data:{ gnfldm:'CXFW', sqzldm:'',ssxmdm:''}
+        })
+      }
+    });
+
+    let $ = cheerio.load(ret.body);
+
+    let trList = $('#querytb>tr').toArray();
+
+    return _.map(trList, o=>{
+      let tdList = $('td', o);
+      return {
+        yhhb: _.trim(tdList.eq(3).text()),
+        yhdm: _.trim(tdList.eq(4).text()),
+        yhzh: _.trim(tdList.eq(5).text())
+      }
+    });
   }
 }

@@ -251,8 +251,12 @@
               <tr>
                 <th>组织机构代码</th>
                 <td>{{resultJson.info.zzjgdm}}</td>
+                <th>证照号码</th>
+                <td>{{resultJson.info.zzhm}}</td>
+              </tr>
+              <tr>
                 <th>生产经营期限</th>
-                <td>{{resultJson.info.scjyqx}}</td>
+                <td colspan="3">{{resultJson.info.scjyqx}}</td>
               </tr>
               <tr>
                 <th>注册地址</th>
@@ -311,6 +315,26 @@
                 <th>{{o.zjzl}}</th>
                 <td>{{o.zjhm}}</td>
                 <th>{{o.gjdz}}</th>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <h4>存款账户</h4>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>银行行别</th>
+                <th>银行代码</th>
+                <th>银行帐号</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for o in resultJson.info.ckzhList %}
+              <tr>
+                <th>{{o.yhhb}}</th>
+                <td>{{o.yhdm}}</td>
+                <th>{{o.yhzh}}</th>
               </tr>
               {% endfor %}
             </tbody>
