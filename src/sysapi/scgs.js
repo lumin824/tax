@@ -81,14 +81,28 @@ export default class extends Base {
     return result.pageInfo.list;
   }
 
+  async fetch_nsrjbxx(nsrsbh){
+    let ret = await this.httpPost('http://wsbs.sc-n-tax.gov.cn/sscx/nsrjbxx/getnsrjbxx.json', {
+      form: {nsrsbh}
+    });
+
+    let result = JSON.parse(ret.body);
+
+    return result.data;
+  }
+
   async data(){
     let topmenu = await this.fetch_topmenu();
     let dzjk = await this.fetch_dzjk();
 
+    let nsrsbh = topmenu.yhzhxx.bdqyxx.bdnsrsbh;
+
+    let nsrjbxx = await this.fetch_nsrjbxx(nsrsbh);
+
     let info = {
-      nsrsbh: topmenu.yhzhxx.bdqyxx.bdnsrsbh,
-      name: topmenu.yhzhxx.bdqyxx.bdnsrmc
-    }
+      nsrsbh, name: topmenu.yhzhxx.bdqyxx.bdnsrmc,
+      ...nsrjbxx
+    };
 
     let taxList = _.map(dzjk, o=>({
       name:o.zsxmmc+'-'+o.zspmmc,money:o.se,time:o.rkrq,remark:'国税-电子缴款'
