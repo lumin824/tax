@@ -47,6 +47,7 @@ export default class extends Base {
     let result = JSON.parse(ret.body);
     let errmsg, errno;
     if(result.success){
+      this._logininfo = result.data.nsrxxVO;
       errno = '0';
       errmsg = '';
     }else{
@@ -56,8 +57,24 @@ export default class extends Base {
     return {errno, errmsg};
   }
 
+  async fetch_nsrjbxx(nsrsbh){
+    let ret = await this.httpPost('http://dzswj.szgs.gov.cn/gzcx/gzcxAction_queryNsrxxBynsrsbh.do',{
+      form: {nsrsbh}
+    });
+    let result = JSON.parse(ret);
+
+    return result.data[0];
+  }
+
   async data(){
 
-    return {ok:'ok'};
+    console.log(this._logininfo);
+    let info = {
+      ...this._logininfo,
+      name: this._logininfo.nsrmc,
+      zzjgdm: this._logininfo.zzjgDm
+    };
+    console.log('22222');
+    return {info};
   }
 }
