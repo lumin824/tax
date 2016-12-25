@@ -67,14 +67,11 @@ export default class extends Base {
   }
 
   async data(){
-
-    console.log(this._logininfo);
     let info = {
       ...this._logininfo,
       name: this._logininfo.nsrmc,
       zzjgdm: this._logininfo.zzjgDm
     };
-    console.log('22222');
     return {info};
   }
 }
