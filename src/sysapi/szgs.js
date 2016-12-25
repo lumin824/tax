@@ -58,20 +58,32 @@ export default class extends Base {
   }
 
   async fetch_nsrjbxx(nsrsbh){
+    console.log(nsrsbh);
     let ret = await this.httpPost('http://dzswj.szgs.gov.cn/gzcx/gzcxAction_queryNsrxxBynsrsbh.do',{
       form: {nsrsbh}
     });
-    let result = JSON.parse(ret);
 
-    return result.data[0];
+    return JSON.parse(ret.body).data[0];
   }
 
   async data(){
+
+    let { nsrsbh } = this._logininfo;
+    let nsrjbxx = await this.fetch_nsrjbxx(nsrsbh);
     let info = {
+      ...nsrjbxx,
       ...this._logininfo,
-      name: this._logininfo.nsrmc,
-      zzjgdm: this._logininfo.zzjgDm
+
     };
+
+    info = {
+      ...info,
+      name: info.nsrmc,
+      zzjgdm: info.zzjgDm,
+      scdyzbm: info.scjydyzbm,
+      scdlxdh: info.scjydlxdh,
+      wjrs: info.wjcyrs
+    }
     return {info};
   }
 }
