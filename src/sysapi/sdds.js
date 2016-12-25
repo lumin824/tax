@@ -185,10 +185,14 @@ export default class extends Base {
     let nsrjbxx = await this.fetch_nsrjbxx();
     let jkxx = await this.fetch_jkxx(nsrjbxx.nsrsbh,nsrjbxx.djxh,'2012-01-01','2016-12-31');
 
+    let info = {
+      ...nsrjbxx,
+      name: nsrjbxx.nsrmc
+    }
     let taxList = _.map(jkxx, o=>(
       {name:o.ZSXM_DM, money:o.JKJE, time:o.LRRQ, remark:'地税-缴款信息'}
     ))
     //console.log(nsrjbxx);
-    return {taxList};
+    return {info,taxList};
   }
 }
