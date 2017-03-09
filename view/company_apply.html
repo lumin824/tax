@@ -125,7 +125,8 @@
           data: data,
           success: function(resp){
             if(resp.errno == 0){
-              alert('申请审核成功');
+              if(resp.msg) alert(resp.msg)
+              else alert('申请审核成功');
 
               if(window.localStorage){
                 var list = JSON.parse(localStorage.getItem('apply_uscc_list') || '[]');

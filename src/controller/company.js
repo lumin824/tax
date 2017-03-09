@@ -191,13 +191,14 @@ export default class extends Base {
       }
 
       console.log('国税验证中...')
+      let msg = [];
       if(gs_api){
         let username = data.gs_username || data.uscc;
         let {errno:gs_errno,errmsg:gs_errmsg} = await gs_api.login(username, data.gs_password);
         while(gs_errno == 'ERR_03'){
           ({errno:gs_errno,errmsg:gs_errmsg} = await gs_api.login(username, data.gs_password));
         }
-        if(gs_errno != '0') gs_api = null;
+        if(gs_errno != '0') { gs_api = null; msg.push('国税账号信息错误')};
         console.log('国税登录结果:'+gs_errno+'='+gs_errmsg);
         this.model('company_apply').where({id}).update({gs_errno, gs_errmsg});
       }
@@ -209,7 +210,7 @@ export default class extends Base {
         while(ds_errno == 'ERR_03'){
           ({errno:ds_errno,errmsg:ds_errmsg} = await ds_api.login(username, data.ds_password));
         }
-        if(ds_errno != '0') ds_api = null;
+        if(ds_errno != '0') { ds_api = null; msg.push('地税税账号信息错误')}
         console.log('地税登录结果:'+ds_errno+'='+ds_errmsg);
         this.model('company_apply').where({id}).update({ds_errno, ds_errmsg});
       }
@@ -224,6 +225,7 @@ export default class extends Base {
         this._process_cc(cc_api, id, data.name, data.uscc, data.gs_username, data.ds_username);
       //ret.redirect = `/company/apply_result?id=${id}`;
       ret.reload = true;
+      ret.msg = msg.join(',');
 
       return this.success(ret);
     }
