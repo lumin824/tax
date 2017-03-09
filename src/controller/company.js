@@ -225,7 +225,11 @@ export default class extends Base {
         this._process_cc(cc_api, id, data.name, data.uscc, data.gs_username, data.ds_username);
       //ret.redirect = `/company/apply_result?id=${id}`;
       ret.reload = true;
-      ret.msg = msg.join(',');
+      if(_.size(msg)){
+        ret.msg = msg.join(',');
+        ret.reload = false;
+      }
+
 
       return this.success(ret);
     }
